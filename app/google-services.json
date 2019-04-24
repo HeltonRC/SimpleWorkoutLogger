@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "916415736427",
+    "firebase_url": "https://hrcworkoutlogger.firebaseio.com",
+    "project_id": "hrcworkoutlogger",
+    "storage_bucket": "hrcworkoutlogger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916415736427:android:f88f97a621895c1a",
+        "android_client_info": {
+          "package_name": "com.hrcosta.simpleworkoutlogger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916415736427-h6fd5b9hiabstjf6get5ubo0fqfb1r5a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9TzblJtgbJhxs8oq0weVwQiXpuFw9d0g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "916415736427-h6fd5b9hiabstjf6get5ubo0fqfb1r5a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
