@@ -38,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
         //setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("User Login");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        FirebaseApp.initializeApp(this);
 
     }
 
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-       // mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
 
         String input =  "Email: " + textInputEmail.getEditText().getText().toString();
