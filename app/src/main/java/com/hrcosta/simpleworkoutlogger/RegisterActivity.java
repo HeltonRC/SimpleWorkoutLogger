@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
@@ -28,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     String usernameInput;
     String passwordInput;
     String passwordInput2;
+    private ProgressDialog mProgressDialog;
 
     @BindView(R.id.textinput_email) TextInputLayout textInputEmail;
     @BindView(R.id.textinput_username) TextInputLayout textInputName;
@@ -48,6 +51,9 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         //todo arrow not working
 
+        mProgressDialog = new ProgressDialog(this);
+        mAuth = FirebaseAuth.getInstance();
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +68,8 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         } else {
             Toast.makeText(this, "Validation ok.", Toast.LENGTH_LONG).show();
+            mProgressDialog.setMessage("Creating account...");
+            mProgressDialog.show();
             RegisterAccount(emailInput,passwordInput);
         }
     }
@@ -74,13 +82,18 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
+                            mProgressDialog.dismiss();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(RegisterActivity.this, user + "Registered", Toast.LENGTH_SHORT).show();
-                         //   updateUI(user);
+                            Toast.makeText(RegisterActivity.this, user + "Registered successfully, you can login now", Toast.LENGTH_LONG).show();
+
+                            //todo call calendar view providing the user.
+
+                         // updateUI(user);
                         } else {
+                            mProgressDialog.dismiss();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_LONG).show();
                          //   updateUI(null);
                         }
                         // ...
