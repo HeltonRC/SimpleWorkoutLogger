@@ -16,7 +16,7 @@ public class Home extends Application {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
         if (firebaseUser != null){
-            startActivity(new Intent(Home.this, CalendarActivity.class));
+            startActivity(new Intent(Home.this, CalendarActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
 
 
