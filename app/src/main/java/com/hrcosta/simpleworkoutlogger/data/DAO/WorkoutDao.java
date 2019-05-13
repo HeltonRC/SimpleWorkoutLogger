@@ -1,6 +1,8 @@
-package com.hrcosta.simpleworkoutlogger.data;
+package com.hrcosta.simpleworkoutlogger.data.DAO;
 
-import java.util.Date;
+import com.hrcosta.simpleworkoutlogger.data.DateConverter;
+import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
+
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -17,14 +19,16 @@ import androidx.room.Update;
 public interface WorkoutDao {
 
     @Insert
-    void insertTask(Workout workout);
+    void insert(Workout workout);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateTask(Workout workout);
+    void update(Workout workout);
 
     @Delete
-    void deleteTask(Workout workout);
+    void delete(Workout workout);
 
+    @Query("DELETE FROM workout_table")
+    void deleteAll();
 
     @Query("SELECT *" +
             "FROM workout_table " +

@@ -1,4 +1,4 @@
-package com.hrcosta.simpleworkoutlogger.data;
+package com.hrcosta.simpleworkoutlogger.data.Entity;
 
 /*
     This class will be used for the database relationship of many to many for
@@ -13,7 +13,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 
 @Entity(
-        tableName = "workout_exercises_join",
+        tableName = "work_exercises_join",
         primaryKeys = { "workoutId", "exerciseId" },
         foreignKeys = {
                 @ForeignKey(entity = Workout.class,
@@ -23,7 +23,8 @@ import androidx.room.ForeignKey;
                         parentColumns = "id",
                         childColumns = "exerciseId")
         })
-public class WorkoutExerciseJoin {
+
+public class WorkExerciseJoin {
     private int workoutId;
     private int exerciseId;
 
@@ -31,10 +32,42 @@ public class WorkoutExerciseJoin {
     private Date logDate;
     private int repetitions;
 
-    public WorkoutExerciseJoin(int workoutId, int exerciseId, Date date, int repetitions) {
+    public WorkExerciseJoin(int workoutId, int exerciseId, Date logDate, int repetitions) {
         this.workoutId = workoutId;
         this.exerciseId = exerciseId;
-        this.logDate = date;
+        this.logDate = logDate;
+        this.repetitions = repetitions;
+    }
+
+    public int getWorkoutId() {
+        return workoutId;
+    }
+
+    public int getExerciseId() {
+        return exerciseId;
+    }
+
+    public Date getLogDate() {
+        return logDate;
+    }
+
+    public int getRepetitions() {
+        return repetitions;
+    }
+
+    public void setWorkoutId(int workoutId) {
+        this.workoutId = workoutId;
+    }
+
+    public void setExerciseId(int exerciseId) {
+        this.exerciseId = exerciseId;
+    }
+
+    public void setLogDate(Date logDate) {
+        this.logDate = logDate;
+    }
+
+    public void setRepetitions(int repetitions) {
         this.repetitions = repetitions;
     }
 }

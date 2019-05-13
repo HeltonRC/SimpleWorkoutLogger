@@ -1,4 +1,4 @@
-package com.hrcosta.simpleworkoutlogger.data;
+package com.hrcosta.simpleworkoutlogger.data.Entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -8,9 +8,8 @@ import androidx.room.PrimaryKey;
 @Entity (tableName = "exercise_table")
 public class Exercise {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private int id;
-
     @ColumnInfo (name = "ex_name")
     private String exName;
     @ColumnInfo (name = "ex_description")

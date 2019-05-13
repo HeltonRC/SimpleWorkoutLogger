@@ -1,4 +1,6 @@
-package com.hrcosta.simpleworkoutlogger.data;
+package com.hrcosta.simpleworkoutlogger.data.DAO;
+
+import com.hrcosta.simpleworkoutlogger.data.Entity.User;
 
 import java.util.List;
 
@@ -13,13 +15,13 @@ import androidx.room.Update;
 @Dao
 public interface UserDao {
     @Insert
-    void insertUser(User user);
+    void insert(User user);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateUser(User user);
+    void update(User user);
 
     @Delete
-    void deleteUser(User user);
+    void delete(User user);
 
     @Query("SELECT * FROM user_table ORDER BY user_name")
     LiveData<List<User>> loadAllUsers();

@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-import com.hrcosta.simpleworkoutlogger.data.Exercise;
+import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
 
 import java.util.ArrayList;
 import java.util.List;

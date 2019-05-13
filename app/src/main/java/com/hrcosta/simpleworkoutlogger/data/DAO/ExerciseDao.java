@@ -1,4 +1,6 @@
-package com.hrcosta.simpleworkoutlogger.data;
+package com.hrcosta.simpleworkoutlogger.data.DAO;
+
+import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
 
 import java.util.List;
 
@@ -14,20 +16,21 @@ import androidx.room.Update;
 public interface ExerciseDao {
 
     @Insert
-    void insertExercise(Exercise exercise);
+    void insert(Exercise exercise);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateExercise(Exercise exercise);
+    void update(Exercise exercise);
 
     @Delete
-    void deleteExercise(Exercise exercise);
+    void delete(Exercise exercise);
+
+    @Query("DELETE FROM exercise_table")
+    void deleteAll();
 
     @Query("SELECT * FROM exercise_table ORDER BY ex_name")
     LiveData<List<Exercise>> loadAllExercises();
 
     @Query("SELECT * FROM exercise_table WHERE id = :id")
     LiveData<Exercise> loadExerciseById(int id);
-
-
 
 }
