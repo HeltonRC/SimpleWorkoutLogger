@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("User Login");
+        getSupportActionBar().setTitle("UserSqlDB Login");
 
 
         FirebaseApp.initializeApp(this);

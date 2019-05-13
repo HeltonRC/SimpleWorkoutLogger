@@ -1,4 +1,4 @@
-package com.hrcosta.simpleworkoutlogger.data;
+package com.hrcosta.simpleworkoutlogger.dataSql;
 
 import android.provider.BaseColumns;
 

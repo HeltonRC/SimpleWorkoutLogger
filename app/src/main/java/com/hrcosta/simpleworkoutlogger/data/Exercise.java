@@ -1,11 +1,37 @@
 package com.hrcosta.simpleworkoutlogger.data;
 
-class Exercise {
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
+@Entity (tableName = "exercise_table")
+public class Exercise {
+
+    @PrimaryKey(autoGenerate = true)
     private int id;
+
+    @ColumnInfo (name = "ex_name")
     private String exName;
+    @ColumnInfo (name = "ex_description")
     private String exDescription;
+    @ColumnInfo (name = "ex_category")
     private String exCategory;
+
+    @Ignore
+    public Exercise(String exName, String exDescription, String exCategory) {
+        this.exName = exName;
+        this.exDescription = exDescription;
+        this.exCategory = exCategory;
+    }
+
+
+    public Exercise(int id, String exName, String exDescription, String exCategory) {
+        this.id = id;
+        this.exName = exName;
+        this.exDescription = exDescription;
+        this.exCategory = exCategory;
+    }
 
     public int getId() {
         return id;
@@ -38,5 +64,4 @@ class Exercise {
     public void setExCategory(String exCategory) {
         this.exCategory = exCategory;
     }
-
 }

@@ -26,6 +26,15 @@ android {
 }
 
 dependencies {
+    def lifecycle_version = "2.0.0"
+    def room_version = "2.1.0-alpha07"
+    //room, livedata and viewmodel
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
     implementation 'com.google.android.material:material:1.0.0-beta01'
