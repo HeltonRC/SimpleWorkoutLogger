@@ -40,7 +40,7 @@
         android:id="@+id/tv_user"
         android:layout_width="wrap_content"
         android:layout_height="17dp"
-        android:layout_above="@+id/rv_calendarlist"
+        android:layout_above="@+id/ll_listcontainer"
         android:layout_below="@id/guideline"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="8dp"
@@ -72,13 +72,33 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_calendarlist"
+    <LinearLayout
+        android:id="@+id/ll_listcontainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
         android:layout_below="@id/tv_arrow"
-        tools:listitem="@layout/list_item"/>
+        android:layout_above="@id/btn_logoff"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:textAlignment="textEnd"
+            android:textSize="17sp"
+            tools:text="05/05/1999"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_calendarlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            tools:listitem="@layout/list_item"/>
+
+    </LinearLayout>
+
 
 
 

@@ -2,6 +2,11 @@ package com.hrcosta.simpleworkoutlogger;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -13,12 +18,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
+import com.hrcosta.simpleworkoutlogger.data.ViewModel.CalendarActivityViewModel;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class CalendarActivity extends AppCompatActivity {
@@ -35,13 +44,16 @@ public class CalendarActivity extends AppCompatActivity {
 
     @BindView(R.id.btn_logoff) Button btnLogoff;
     @BindView(R.id.compactcalendar_view) CompactCalendarView compactCalendarView;
+    @BindView(R.id.rv_calendarlist) RecyclerView recyclerView;
+
+    private CalendarActivityViewModel calendarActivityViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
-
         ButterKnife.bind(this);
+
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
 
@@ -61,6 +73,20 @@ public class CalendarActivity extends AppCompatActivity {
         final View.OnClickListener exposeCalendarListener = getCalendarExposeLis();
         tvArrow.setOnClickListener(exposeCalendarListener);
 
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        CalendarListAdapter calendarListAdapter = new CalendarListAdapter();
+        recyclerView.setAdapter(calendarListAdapter);
+
+        calendarActivityViewModel = ViewModelProviders.of(this).get(CalendarActivityViewModel.class);
+        calendarActivityViewModel.getAllWorkouts().observe(this, new Observer<List<Workout>>() {
+            @Override
+            public void onChanged(List<Workout> workouts) {
+                //todo update recycler view
+                calendarListAdapter.setWorkoutList(workouts);
+                Toast.makeText(CalendarActivity.this, "onChangedListWorkout", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

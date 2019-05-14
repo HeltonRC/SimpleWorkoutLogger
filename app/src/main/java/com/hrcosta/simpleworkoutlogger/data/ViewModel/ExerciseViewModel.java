@@ -1,7 +1,8 @@
-package com.hrcosta.simpleworkoutlogger.data;
+package com.hrcosta.simpleworkoutlogger.data.ViewModel;
 
 import android.app.Application;
 
+import com.hrcosta.simpleworkoutlogger.data.DataRepository;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
 
 import java.util.List;
