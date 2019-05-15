@@ -16,7 +16,7 @@ import androidx.room.Update;
 public interface ExerciseDao {
 
     @Insert
-    void insert(Exercise exercise);
+    long insert(Exercise exercise);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void update(Exercise exercise);

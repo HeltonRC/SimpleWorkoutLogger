@@ -1,6 +1,8 @@
 package com.hrcosta.simpleworkoutlogger.data.DAO;
 
 import com.hrcosta.simpleworkoutlogger.data.DateConverter;
+import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
+import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
 
 import java.util.List;
@@ -14,18 +16,24 @@ import androidx.room.Query;
 import androidx.room.TypeConverters;
 import androidx.room.Update;
 
+import static androidx.room.OnConflictStrategy.REPLACE;
+
 @Dao
 @TypeConverters(DateConverter.class)
 public interface WorkoutDao {
 
     @Insert
-    void insert(Workout workout);
+    long insert(Workout workout);
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = REPLACE)
+    void saveExercises(List<Exercise> exercises);
+
+    @Update(onConflict = REPLACE)
     void update(Workout workout);
 
     @Delete
     void delete(Workout workout);
+
 
     @Query("DELETE FROM workout_table")
     void deleteAll();
@@ -33,7 +41,17 @@ public interface WorkoutDao {
     @Query("SELECT *" +
             "FROM workout_table " +
             "ORDER BY id")
-        LiveData<List<Workout>> loadAllWorkouts();
+    LiveData<List<Workout>> loadAllWorkouts();
 
+    @Query("SELECT *" +
+            "FROM workout_table " +
+            "WHERE id=:id")
+    LiveData<Workout> loadWorkoutById(int id);
+
+
+    @Query("SELECT * " +
+            "FROM work_exercises_join " +
+            "WHERE workoutId=:id")
+    List<WorkExerciseJoin> loadJoinsByWorkoutId(int id);
 
 }

@@ -2,6 +2,7 @@ package com.hrcosta.simpleworkoutlogger.data;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.hrcosta.simpleworkoutlogger.data.DAO.ExerciseDao;
 import com.hrcosta.simpleworkoutlogger.data.DAO.UserDao;
@@ -12,9 +13,13 @@ import com.hrcosta.simpleworkoutlogger.data.Entity.User;
 import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 
 /*
 This class is an abstraction layer between the data sources and the View Model component of the app.
@@ -201,6 +206,24 @@ public class DataRepository {
         }
     }
 
+    public LiveData<Workout> getWorkoutExercises(int id) {
+        LiveData<Workout> workoutLiveData = workoutDao.loadWorkoutById(id);
+        workoutLiveData = Transformations.switchMap(workoutLiveData, new Function<Workout, LiveData<Workout>>() {
+            @Override
+            public LiveData<Workout> apply(Workout inputWorkout) {
+                LiveData<List<Exercise>> exercisesLiveData = workExerciseJoinDao.getExercisesForWorkout(inputWorkout.getId());
+                LiveData<Workout> outputLiveData = Transformations.map(exercisesLiveData, new Function<List<Exercise>, Workout>() {
+                    @Override
+                    public Workout apply(List<Exercise> inputExercises) {
+                        inputWorkout.setExercises(inputExercises);
+                        return inputWorkout;
+                    }
+                });
+                return outputLiveData;
+            }
+        });
+        return workoutLiveData;
+    }
 
     /*
      ============================================================
@@ -275,12 +298,94 @@ public class DataRepository {
         return workExerciseJoinDao.getExercisesForWorkout(workout.getId());
     }
 
+    public LiveData<List<WorkExerciseJoin>> getWorkExerciseJoinByDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int month = cal.get(Calendar.MONTH) +1;
+        int year = cal.get(Calendar.YEAR);
+
+        return workExerciseJoinDao.getWorkExeJoinOnDateInt(day,month,year);
+    }
+
+    public LiveData<List<Workout>> getWorkoutsByDate(Date date) {
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int month = cal.get(Calendar.MONTH) + 1;
+        int year = cal.get(Calendar.YEAR);
+        LiveData<List<Workout>> workoutsLiveData = workExerciseJoinDao.getWorkoutOnDateInt(day,month,year);
+
+        workoutsLiveData = Transformations.map(workoutsLiveData, new Function<List<Workout>, List<Workout>>() {
+            @Override
+            public List<Workout> apply(final List<Workout> inputWorkouts) {
+                for (Workout workout : inputWorkouts) {
+                    //Unable to use LiveData in this request
+                    //ref.  https://proandroiddev.com/android-room-handling-relations-using-livedata-2d892e40bd53
+
+                    int workoutId = workout.getId();
+                    Log.d("TAG", "workoutId: " + String.valueOf(workoutId));
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            workout.setExercises(workExerciseJoinDao.getExercisesListForWorkout(workout.getId()));
+                        }
+                    });
+                }
+                return inputWorkouts;
+            }
+        });
+
+        return workoutsLiveData;
+    }
+
+
+    public List<WorkExerciseJoin> getAllWEJoin(){
+        return workExerciseJoinDao.getAllWEJoin();
+    }
 
     public void insertWorkExerciseJoin(WorkExerciseJoin workExerciseJoin) {
         new InsertJoinAsyncTask(workExerciseJoinDao).execute(workExerciseJoin);
     }
 
-
+//    private static class getWorkoutsByDateAsyncTask extends AsyncTask<Date,Void,Void> {
+//        private WorkExerciseJoinDao joinDao;
+//        Calendar cal = Calendar.getInstance();
+//
+//        public getWorkoutsByDateAsyncTask(WorkExerciseJoinDao joinDao) {
+//            this.joinDao = joinDao;
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Date... dates) {
+//
+//            cal.setTime(dates[0]);
+//            int day = cal.get(Calendar.DAY_OF_MONTH);
+//            int month = cal.get(Calendar.MONTH) + 1;
+//            int year = cal.get(Calendar.YEAR);
+//            LiveData<List<Workout>> workoutsLiveData = joinDao.getWorkoutOnDateInt(day,month,year);
+//
+//            workoutsLiveData = Transformations.map(workoutsLiveData, new Function<List<Workout>, List<Workout>>() {
+//                @Override
+//                public List<Workout> apply(final List<Workout> inputWorkouts) {
+//                    for (Workout workout : inputWorkouts) {
+//                        //Unable to use LiveData in this request
+//                        //ref.  https://proandroiddev.com/android-room-handling-relations-using-livedata-2d892e40bd53
+//                        workout.setExercises(joinDao.getExercisesListForWorkout(workout.getId()));
+//                    }
+//                    return inputWorkouts;
+//                }
+//            });
+//            return null;
+//        }
+//    }
     private static class InsertJoinAsyncTask extends AsyncTask<WorkExerciseJoin, Void, Void> {
         private WorkExerciseJoinDao joinDao;
 

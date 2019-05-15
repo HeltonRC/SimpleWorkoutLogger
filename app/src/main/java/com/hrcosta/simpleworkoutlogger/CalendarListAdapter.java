@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import com.hrcosta.simpleworkoutlogger.data.DatabaseHelper;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
 
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapter.ViewHolderCalendarList> {
 
     private List<Workout> workoutList = new ArrayList<>();
+    private List<Exercise> exerciseList = new ArrayList<>();
 
     @NonNull
     @Override
@@ -32,6 +34,11 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
     public void onBindViewHolder(@NonNull ViewHolderCalendarList holder, int position) {
         Workout workout = workoutList.get(position);
         holder.tvName.setText(workout.getNotes());
+        holder.tvDetails.setText(String.valueOf(workout.getExercises().size()));
+
+
+
+//        holder.tvDetails.setText(workout.get);
     }
 
     @Override
@@ -51,10 +58,8 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
 
         public ViewHolderCalendarList(@NonNull View itemView) {
             super(itemView);
-
             tvName = itemView.findViewById(R.id.tv_name);
             tvDetails = itemView.findViewById(R.id.tv_details);
-
 
         }
     }

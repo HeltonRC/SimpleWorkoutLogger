@@ -5,32 +5,25 @@ import java.util.List;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity (tableName = "workout_table")
 public class Workout {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private String notes;
 
+//    @ForeignKey(entity = User.class, parentColumns = "id", childColumns = "user_id")
+//    @ColumnInfo (name = "user_id")
+//    private int userId;
 
-
-//    @Ignore
-//    private List<Exercise> exercises;
-
-//    @Ignore
-//    private int UserId;
-
-    //username / list of exercises
     @Ignore
-    public Workout(String notes) {
-        this.notes = notes;
-    }
+    private List<Exercise> exercises;
 
-    public Workout(int id, String notes) {
-        this.id = id;
+    public Workout(String notes) {
         this.notes = notes;
     }
 
@@ -48,5 +41,21 @@ public class Workout {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+//    public int getUserId() {
+//        return userId;
+//    }
+//
+//    public void setUserId(int userId) {
+//        this.userId = userId;
+//    }
+
+    public List<Exercise> getExercises() {
+        return exercises;
+    }
+
+    public void setExercises(List<Exercise> exercises) {
+        this.exercises = exercises;
     }
 }

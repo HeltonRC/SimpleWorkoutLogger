@@ -3,8 +3,11 @@ package com.hrcosta.simpleworkoutlogger.data.ViewModel;
 import android.app.Application;
 
 import com.hrcosta.simpleworkoutlogger.data.DataRepository;
+import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
+import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
 
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -24,7 +27,7 @@ public class CalendarActivityViewModel extends AndroidViewModel {
     public CalendarActivityViewModel(@NonNull Application application) {
         super(application);
         repository = new DataRepository(application);
-        allWorkouts = repository.getAllWorkouts();
+       // allWorkouts = repository.getAllWorkouts();
 
     }
 
@@ -46,9 +49,27 @@ public class CalendarActivityViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Workout>> getAllWorkouts() {
+
         return repository.getAllWorkouts();
     }
 
+    public LiveData<List<Exercise>> getExercisesOfWorkout(Workout workout){
+
+        return repository.getExercisesForWorkout(workout);
+    }
+
+    public LiveData<List<Workout>> getWorkoutByDate(Date date) {
+        LiveData<List<Workout>> result = repository.getWorkoutsByDate(date);
+
+
+        return result;
+    }
+
+
+
+    public List<WorkExerciseJoin> getAllWEJoin(){
+        return repository.getAllWEJoin();
+    }
 
 
 

@@ -2,6 +2,7 @@ package com.hrcosta.simpleworkoutlogger;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -23,10 +24,16 @@ import android.widget.Toast;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.hrcosta.simpleworkoutlogger.data.DateConverter;
+import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
 import com.hrcosta.simpleworkoutlogger.data.ViewModel.CalendarActivityViewModel;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -79,14 +86,23 @@ public class CalendarActivity extends AppCompatActivity {
         recyclerView.setAdapter(calendarListAdapter);
 
         calendarActivityViewModel = ViewModelProviders.of(this).get(CalendarActivityViewModel.class);
-        calendarActivityViewModel.getAllWorkouts().observe(this, new Observer<List<Workout>>() {
+
+        Date date1 = new GregorianCalendar(2019,05,01).getTime();
+
+//        List<Workout> workouts = calendarActivityViewModel.getWorkoutByDate(date1);
+//        calendarListAdapter.setWorkoutList(workouts);
+//        Toast.makeText(CalendarActivity.this, "listPopulated", Toast.LENGTH_SHORT).show();
+
+
+        calendarActivityViewModel.getWorkoutByDate(date1).observe(this, new Observer<List<Workout>>() {
             @Override
             public void onChanged(List<Workout> workouts) {
                 //todo update recycler view
                 calendarListAdapter.setWorkoutList(workouts);
-                Toast.makeText(CalendarActivity.this, "onChangedListWorkout", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(CalendarActivity.this, "onChangedListWorkout", Toast.LENGTH_SHORT).show();
             }
         });
+
 
     }
 
