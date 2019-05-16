@@ -29,7 +29,7 @@ public interface WorkExerciseJoinDao {
             "INNER JOIN work_exercises_join t2 " +
             "ON t1.Id = t2.exerciseId WHERE " +
             " t2.workoutId=:workoutId")
-    List<Exercise> getExercisesListForWorkout(final int workoutId);
+    List<WorkExerciseJoin> getExercisesListForWorkout(final int workoutId);
 
 
     @Query("SELECT * " +
@@ -63,8 +63,9 @@ public interface WorkExerciseJoinDao {
             "FROM workout_table t1 " +
             "INNER JOIN work_exercises_join t2 " +
             "ON t1.id = t2.workoutId " +
-            "WHERE day=:day AND month=:mon AND year=:year ")
-    LiveData<List<Workout>> getWorkoutOnDateInt(int day,int mon,int year);
+            "WHERE day=:day AND month=:mon AND year=:year")
+    LiveData<Workout> getWorkoutOnDateInt(int day,int mon,int year);
+
 
     @Query("SELECT * FROM work_exercises_join ORDER BY log_date")
     List<WorkExerciseJoin> getAllWEJoin();

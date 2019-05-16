@@ -30,12 +30,15 @@ public class WorkExerciseJoin {
 
     @ColumnInfo(name = "log_date")
     private Date logDate;
+    @ColumnInfo(name = "ex_name")
+    private String exerciseName;
     private int repetitions;
 
-    public WorkExerciseJoin(int workoutId, int exerciseId, Date logDate, int repetitions) {
+    public WorkExerciseJoin(int workoutId, int exerciseId, Date logDate, String exerciseName, int repetitions) {
         this.workoutId = workoutId;
         this.exerciseId = exerciseId;
         this.logDate = logDate;
+        this.exerciseName = exerciseName;
         this.repetitions = repetitions;
     }
 
@@ -49,6 +52,10 @@ public class WorkExerciseJoin {
 
     public Date getLogDate() {
         return logDate;
+    }
+
+    public String getExerciseName() {
+        return exerciseName;
     }
 
     public int getRepetitions() {
@@ -65,6 +72,10 @@ public class WorkExerciseJoin {
 
     public void setLogDate(Date logDate) {
         this.logDate = logDate;
+    }
+
+    public void setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
     }
 
     public void setRepetitions(int repetitions) {

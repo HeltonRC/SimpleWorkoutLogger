@@ -1,10 +1,9 @@
 package com.hrcosta.simpleworkoutlogger;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,13 +21,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.hrcosta.simpleworkoutlogger.data.DateConverter;
+import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
 import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
 import com.hrcosta.simpleworkoutlogger.data.ViewModel.CalendarActivityViewModel;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,18 +43,24 @@ public class CalendarActivity extends AppCompatActivity {
     private Calendar currentCalender = Calendar.getInstance(Locale.getDefault());
     private boolean shouldShow = false;
 
-
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
 
     @BindView(R.id.tv_user) TextView tvUser;
     @BindView(R.id.tv_arrow) TextView tvArrow;
+    @BindView(R.id.tv_date) TextView tvDate;
+    @BindView(R.id.tv_list_title) TextView tvListTitle;
+    @BindView(R.id.tv_details) TextView tvDetails;
 
-    @BindView(R.id.btn_logoff) Button btnLogoff;
+    @BindView(R.id.fab_add_exercise) FloatingActionButton fabAddExercise;
     @BindView(R.id.compactcalendar_view) CompactCalendarView compactCalendarView;
     @BindView(R.id.rv_calendarlist) RecyclerView recyclerView;
 
+    private ActionBar toolbar;
+
     private CalendarActivityViewModel calendarActivityViewModel;
+    private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd-M-yyyy", Locale.getDefault());
+    private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,17 +73,6 @@ public class CalendarActivity extends AppCompatActivity {
 
         tvUser.setText(firebaseUser.getEmail());
 
-        btnLogoff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firebaseAuth.signOut();
-                startActivity(new Intent(CalendarActivity.this,MainActivity.class));
-            }
-        });
-
-//        final View.OnClickListener showCalendarOnClickLis = getCalendarShowLis();
-//        tvArrow.setOnClickListener(showCalendarOnClickLis);
-
         final View.OnClickListener exposeCalendarListener = getCalendarExposeLis();
         tvArrow.setOnClickListener(exposeCalendarListener);
 
@@ -87,23 +83,57 @@ public class CalendarActivity extends AppCompatActivity {
 
         calendarActivityViewModel = ViewModelProviders.of(this).get(CalendarActivityViewModel.class);
 
-        Date date1 = new GregorianCalendar(2019,05,01).getTime();
+        Date date = currentCalender.getTime();
+        calendarActivityViewModel.setDate(date);
+        tvDate.setText(dateFormatForDisplaying.format(date));
 
-//        List<Workout> workouts = calendarActivityViewModel.getWorkoutByDate(date1);
-//        calendarListAdapter.setWorkoutList(workouts);
-//        Toast.makeText(CalendarActivity.this, "listPopulated", Toast.LENGTH_SHORT).show();
-
-
-        calendarActivityViewModel.getWorkoutByDate(date1).observe(this, new Observer<List<Workout>>() {
+        calendarActivityViewModel.getWorkoutByDate().observe(this, new Observer<Workout>() {
             @Override
-            public void onChanged(List<Workout> workouts) {
-                //todo update recycler view
-                calendarListAdapter.setWorkoutList(workouts);
-               // Toast.makeText(CalendarActivity.this, "onChangedListWorkout", Toast.LENGTH_SHORT).show();
+            public void onChanged(Workout workout) {
+                if (workout!=null) {
+                    tvListTitle.setText(getResources().getString(R.string.exercises_completed));
+                    tvDetails.setText(workout.getNotes());
+                } else {
+                    tvDetails.setText("Nothing today =(");
+                }
+            }
+        });
+
+        calendarActivityViewModel.getExercisesDoneOnDate().observe(this, new Observer<List<WorkExerciseJoin>>() {
+            @Override
+            public void onChanged(List<WorkExerciseJoin> workExerciseJoins) {
+                calendarListAdapter.setWorkoutList(workExerciseJoins);
+            }
+        });
+
+        fabAddExercise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(CalendarActivity.this, "Add Exercise function", Toast.LENGTH_SHORT).show();
+                //TODO Start activity to add exercises
+
+
+
+
             }
         });
 
 
+        toolbar = this.getSupportActionBar();
+        toolbar.setTitle(dateFormatForMonth.format(compactCalendarView.getFirstDayOfCurrentMonth()));
+
+        compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            @Override
+            public void onDayClick(Date dateClicked) {
+                tvDate.setText(dateFormatForDisplaying.format(dateClicked));
+                calendarActivityViewModel.setDate(dateClicked);
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
+                toolbar.setTitle(dateFormatForMonth.format(firstDayOfNewMonth));
+            }
+        });
     }
 
 
@@ -116,12 +146,10 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.action_logout) {
             firebaseAuth.signOut();
             startActivity(new Intent(CalendarActivity.this,MainActivity.class));
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -136,7 +164,6 @@ public class CalendarActivity extends AppCompatActivity {
                         compactCalendarView.showCalendar();
                         Drawable img = CalendarActivity.this.getResources().getDrawable( R.drawable.ic_keyboard_arrow_up_black_24dp );
                         tvArrow.setCompoundDrawables(img,null,null,null);
-                        //todo the arrow button is not updating
                     } else {
                         compactCalendarView.hideCalendar();
                         Drawable img = CalendarActivity.this.getResources().getDrawable( R.drawable.ic_keyboard_arrow_down_black_24dp );
@@ -170,5 +197,8 @@ public class CalendarActivity extends AppCompatActivity {
             }
         };
     }
+
+
+
 
 }

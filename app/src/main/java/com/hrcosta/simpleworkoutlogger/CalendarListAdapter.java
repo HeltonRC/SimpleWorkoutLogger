@@ -5,9 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
-import com.hrcosta.simpleworkoutlogger.data.DatabaseHelper;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
+import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
 
 import java.util.ArrayList;
@@ -18,8 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapter.ViewHolderCalendarList> {
 
-    private List<Workout> workoutList = new ArrayList<>();
-    private List<Exercise> exerciseList = new ArrayList<>();
+    private List<WorkExerciseJoin> exerciseDoneList = new ArrayList<>();
 
     @NonNull
     @Override
@@ -32,22 +30,19 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderCalendarList holder, int position) {
-        Workout workout = workoutList.get(position);
-        holder.tvName.setText(workout.getNotes());
-        holder.tvDetails.setText(String.valueOf(workout.getExercises().size()));
+        WorkExerciseJoin exerciseDone = exerciseDoneList.get(position);
+        holder.tvName.setText(exerciseDone.getExerciseName());
+        holder.tvDetails.setText(String.valueOf(exerciseDone.getRepetitions()));
 
-
-
-//        holder.tvDetails.setText(workout.get);
     }
 
     @Override
     public int getItemCount() {
-        return workoutList.size();
+        return exerciseDoneList.size();
     }
 
-    public void setWorkoutList(List<Workout> workouts) {
-        this.workoutList = workouts;
+    public void setWorkoutList(List<WorkExerciseJoin> exercisesDone) {
+        this.exerciseDoneList = exercisesDone;
         notifyDataSetChanged();
     }
 

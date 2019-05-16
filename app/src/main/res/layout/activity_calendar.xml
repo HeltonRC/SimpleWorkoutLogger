@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".CalendarActivity">
 
-
     <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/compactcalendar_view"
         android:layout_width="fill_parent"
@@ -40,7 +39,7 @@
         android:id="@+id/tv_user"
         android:layout_width="wrap_content"
         android:layout_height="17dp"
-        android:layout_above="@+id/ll_listcontainer"
+        android:layout_above="@+id/ll_list_container"
         android:layout_below="@id/guideline"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="8dp"
@@ -61,45 +60,59 @@
         android:layout_below="@id/guideline"
         android:layout_alignParentLeft="true" />
 
-    <Button
-        android:id="@+id/btn_logoff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Logoff"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
-
     <LinearLayout
-        android:id="@+id/ll_listcontainer"
+        android:id="@+id/ll_list_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_below="@id/tv_arrow"
-        android:layout_above="@id/btn_logoff"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         >
 
         <TextView
+            android:id="@+id/tv_date"
             android:layout_width="match_parent"
             android:layout_height="24dp"
             android:textAlignment="textEnd"
             android:textSize="17sp"
             tools:text="05/05/1999"/>
+        <TextView
+            android:id="@+id/tv_list_title"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:textAlignment="textStart"
+            android:layout_marginBottom="8dp"
+            android:textSize="17sp"
+            tools:text="Exercises completed: "/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_calendarlist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             tools:listitem="@layout/list_item"/>
+
+        <TextView
+            android:id="@+id/tv_details"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_marginBottom="8dp"
+            android:textSize="17sp"
+            android:layout_gravity="bottom"
+            android:text="Exercises notes : "/>
 
     </LinearLayout>
 
-
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_exercise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:tint="@android:color/white"
+        android:clickable="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 </RelativeLayout>

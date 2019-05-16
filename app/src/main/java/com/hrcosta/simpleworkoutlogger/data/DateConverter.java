@@ -1,8 +1,6 @@
 package com.hrcosta.simpleworkoutlogger.data;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import androidx.room.TypeConverter;
 

@@ -9,8 +9,6 @@
         android:id="@+id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:text="TextView"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -19,8 +17,6 @@
         android:id="@+id/tv_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:textSize="14sp"
         android:text="TextView" />
 
