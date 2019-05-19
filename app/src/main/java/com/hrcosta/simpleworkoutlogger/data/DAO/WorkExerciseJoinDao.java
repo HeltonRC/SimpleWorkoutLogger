@@ -18,6 +18,8 @@ public interface WorkExerciseJoinDao {
     @Insert
     void insert(WorkExerciseJoin workExerciseJoin);
 
+    //TODO check if delete and update is necessary
+
     @Query("SELECT * " +
             "FROM exercise_table INNER JOIN work_exercises_join ON" +
             " exerciseId = work_exercises_join.exerciseId WHERE " +
@@ -30,12 +32,6 @@ public interface WorkExerciseJoinDao {
             "ON t1.Id = t2.exerciseId WHERE " +
             " t2.workoutId=:workoutId")
     List<WorkExerciseJoin> getExercisesListForWorkout(final int workoutId);
-
-
-    @Query("SELECT * " +
-            "FROM work_exercises_join " +
-            "WHERE log_date = Date(:date)")
-    LiveData<List<WorkExerciseJoin>> getWorkExeJoinOnDate(Date date);
 
 
     @Query("SELECT *, " +
@@ -71,4 +67,6 @@ public interface WorkExerciseJoinDao {
     List<WorkExerciseJoin> getAllWEJoin();
 
 
+    @Query("SELECT log_date FROM work_exercises_join ORDER by log_date")
+    List<Date> getDatesOfEvents();
 }

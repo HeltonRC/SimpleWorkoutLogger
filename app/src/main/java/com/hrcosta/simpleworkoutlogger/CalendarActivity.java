@@ -2,6 +2,7 @@ package com.hrcosta.simpleworkoutlogger;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -10,31 +11,32 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.github.sundeepk.compactcalendarview.domain.Event;
+
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
 import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
-import com.hrcosta.simpleworkoutlogger.data.ViewModel.CalendarActivityViewModel;
+import com.hrcosta.simpleworkoutlogger.ViewModel.CalendarActivityViewModel;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -87,6 +89,79 @@ public class CalendarActivity extends AppCompatActivity {
         calendarActivityViewModel.setDate(date);
         tvDate.setText(dateFormatForDisplaying.format(date));
 
+        setupObservers(calendarListAdapter);
+
+
+        fabAddExercise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO Start activity to add exercises
+                startActivity(new Intent(CalendarActivity.this, RoutinesActivity.class));
+
+            }
+        });
+
+        toolbar = this.getSupportActionBar();
+        toolbar.setTitle(dateFormatForMonth.format(compactCalendarView.getFirstDayOfCurrentMonth()));
+
+
+
+        compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            @Override
+            public void onDayClick(Date dateClicked) {
+                tvDate.setText(dateFormatForDisplaying.format(dateClicked));
+                calendarActivityViewModel.setDate(dateClicked);
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
+                toolbar.setTitle(dateFormatForMonth.format(firstDayOfNewMonth));
+            }
+        });
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                addEventIndicators();
+            }
+        });
+
+    }
+
+
+    private void addEventIndicators() {
+
+        List<Date> dates = calendarActivityViewModel.getDatesOfEvents();
+        List<Event> events = new ArrayList<>();
+
+        for (Date d : dates) {
+            Event event = new Event(Color.BLUE, d.getTime());
+            events.add(event);
+        }
+
+        compactCalendarView.addEvents(events);
+
+//        formatter.setLenient(false);
+//        Date curDate = new Date();
+//        long curMillis = curDate.getTime();
+//        String curTime = formatter.format(curDate);
+//
+//        String oldTime = "05.05.2019, 12:45";
+//        Date oldDate = null;
+//        try {
+//            oldDate = formatter.parse(oldTime);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        long oldMillis = oldDate.getTime();
+//
+//        Event ev1 = new Event(Color.GREEN, oldMillis, "Some extra data that I want to store.");
+//
+//        compactCalendarView.addEvent(ev1);
+    }
+
+    private void setupObservers(CalendarListAdapter calendarListAdapter) {
+        //Get the workouts to populate the Notes for the day
         calendarActivityViewModel.getWorkoutByDate().observe(this, new Observer<Workout>() {
             @Override
             public void onChanged(Workout workout) {
@@ -99,39 +174,11 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
+        //Get the list of exercises with the reps
         calendarActivityViewModel.getExercisesDoneOnDate().observe(this, new Observer<List<WorkExerciseJoin>>() {
             @Override
             public void onChanged(List<WorkExerciseJoin> workExerciseJoins) {
                 calendarListAdapter.setWorkoutList(workExerciseJoins);
-            }
-        });
-
-        fabAddExercise.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(CalendarActivity.this, "Add Exercise function", Toast.LENGTH_SHORT).show();
-                //TODO Start activity to add exercises
-
-
-
-
-            }
-        });
-
-
-        toolbar = this.getSupportActionBar();
-        toolbar.setTitle(dateFormatForMonth.format(compactCalendarView.getFirstDayOfCurrentMonth()));
-
-        compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
-            @Override
-            public void onDayClick(Date dateClicked) {
-                tvDate.setText(dateFormatForDisplaying.format(dateClicked));
-                calendarActivityViewModel.setDate(dateClicked);
-            }
-
-            @Override
-            public void onMonthScroll(Date firstDayOfNewMonth) {
-                toolbar.setTitle(dateFormatForMonth.format(firstDayOfNewMonth));
             }
         });
     }
@@ -153,27 +200,6 @@ public class CalendarActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    @NonNull
-    private View.OnClickListener getCalendarShowLis() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!compactCalendarView.isAnimating()) {
-                    if (shouldShow) {
-                        compactCalendarView.showCalendar();
-                        Drawable img = CalendarActivity.this.getResources().getDrawable( R.drawable.ic_keyboard_arrow_up_black_24dp );
-                        tvArrow.setCompoundDrawables(img,null,null,null);
-                    } else {
-                        compactCalendarView.hideCalendar();
-                        Drawable img = CalendarActivity.this.getResources().getDrawable( R.drawable.ic_keyboard_arrow_down_black_24dp );
-                        tvArrow.setCompoundDrawables(img,null,null,null);
-                    }
-                    shouldShow = !shouldShow;
-                }
-            }
-        };
-    }
 
     @NonNull
     private View.OnClickListener getCalendarExposeLis() {
@@ -199,6 +225,18 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Exit")
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        System.exit(0);
+                    }
+                }).setNegativeButton("No", null).show();
+    }
 
 
 }

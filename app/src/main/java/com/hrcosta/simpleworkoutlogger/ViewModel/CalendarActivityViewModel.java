@@ -1,14 +1,12 @@
-package com.hrcosta.simpleworkoutlogger.data.ViewModel;
+package com.hrcosta.simpleworkoutlogger.ViewModel;
 
 import android.app.Application;
-import android.view.animation.Transformation;
 
-import com.hrcosta.simpleworkoutlogger.data.DataRepository;
-import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
+import com.hrcosta.simpleworkoutlogger.data.Repository.DataRepository;
 import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
+import com.hrcosta.simpleworkoutlogger.data.Repository.WorkoutRepository;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +22,8 @@ import androidx.lifecycle.Transformations;
 
 public class CalendarActivityViewModel extends AndroidViewModel {
 
-    private DataRepository repository;
+    private DataRepository workExerciseJoinRepo;
+    private WorkoutRepository workoutRepository;
     private LiveData<List<Workout>> allWorkouts;
     private LiveData<List<WorkExerciseJoin>> exerciseJoinLiveData;
     private LiveData<Workout> workoutLiveData;
@@ -32,31 +31,32 @@ public class CalendarActivityViewModel extends AndroidViewModel {
 
     public CalendarActivityViewModel(@NonNull Application application) {
         super(application);
-        repository = new DataRepository(application);
-       // allWorkouts = repository.getAllWorkouts();
+        workExerciseJoinRepo = new DataRepository(application);
+        workoutRepository = new WorkoutRepository(application);
+
         exerciseJoinLiveData = Transformations.switchMap(calendarDate,
-                v -> repository.getWorkExerciseJoinByDate(v));
+                v -> workExerciseJoinRepo.getWorkExerciseJoinByDate(v));
 
         workoutLiveData = Transformations.switchMap(calendarDate,
-                v -> repository.getWorkoutByDate(v));
+                v -> workExerciseJoinRepo.getWorkoutByDate(v));
 
     }
 
 
     public void Insert(Workout workout) {
-        repository.insertWorkout(workout);
+        workoutRepository.insertWorkout(workout);
     }
 
     public void Update(Workout workout) {
-        repository.updateWorkout(workout);
+        workoutRepository.updateWorkout(workout);
     }
 
     public void Delete(Workout workout) {
-        repository.deleteWorkout(workout);
+        workoutRepository.deleteWorkout(workout);
     }
 
     public void DeleteAllWorkouts() {
-        repository.deleteAllWorkouts();
+        workoutRepository.deleteAllWorkouts();
     }
 
     public LiveData<List<WorkExerciseJoin>> getExercisesDoneOnDate(){
@@ -72,21 +72,12 @@ public class CalendarActivityViewModel extends AndroidViewModel {
     }
 
     public List<WorkExerciseJoin> getAllWEJoin(){
-        return repository.getAllWEJoin();
+        return workExerciseJoinRepo.getAllWEJoin();
     }
 
-
-
-//    public LiveData<List<Workout>> getAllWorkouts() {
-//        return repository.getAllWorkouts();
-//    }
-//
-//    public LiveData<List<Exercise>> getExercisesOfWorkout(Workout workout){
-//        return repository.getExercisesForWorkout(workout);
-//    }
-
-
-
+    public List<Date> getDatesOfEvents() {
+        return workExerciseJoinRepo.getDatesOfEvents();
+    }
 
 
 }

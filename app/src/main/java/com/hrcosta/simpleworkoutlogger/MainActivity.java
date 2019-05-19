@@ -90,10 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
                         Toast.makeText(MainActivity.this, "successfull", Toast.LENGTH_LONG).show();
-
                         startActivity(new Intent(MainActivity.this, CalendarActivity.class));
-                        //todo start calendar activity
-                        //todo implement mauth.signout() on calendar menu.
                     }else{
                         Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }

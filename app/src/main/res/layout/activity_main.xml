@@ -17,18 +17,42 @@
         <!--android:orientation="horizontal"-->
         <!--app:layout_constraintGuide_begin="50dp" />-->
 
+    <TextView
+        android:id="@+id/tv_welcomeback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="@string/welcome_back"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@id/tv_pleasesignin"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <TextView
+        android:id="@+id/tv_pleasesignin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/please_login"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/textinput_email"
+        app:layout_constraintTop_toBottomOf="@id/tv_welcomeback"
+        tools:layout_editor_absoluteX="16dp" />
+
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textinput_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         app:counterEnabled="true"
         app:counterMaxLength="15"
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/tv_pleasesignin">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"

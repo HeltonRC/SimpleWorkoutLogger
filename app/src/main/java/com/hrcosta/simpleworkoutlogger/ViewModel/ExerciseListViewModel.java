@@ -1,9 +1,9 @@
-package com.hrcosta.simpleworkoutlogger.data.ViewModel;
+package com.hrcosta.simpleworkoutlogger.ViewModel;
 
 import android.app.Application;
 
-import com.hrcosta.simpleworkoutlogger.data.DataRepository;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
+import com.hrcosta.simpleworkoutlogger.data.Repository.ExercisesRepository;
 
 import java.util.List;
 
@@ -11,14 +11,14 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-public class ExerciseViewModel extends AndroidViewModel {
+public class ExerciseListViewModel extends AndroidViewModel {
 
-    private DataRepository repository;
+    private ExercisesRepository repository;
     private LiveData<List<Exercise>> allExercises;
 
-    public ExerciseViewModel(@NonNull Application application) {
+    public ExerciseListViewModel(@NonNull Application application) {
         super(application);
-        repository = new DataRepository(application);
+        repository = new ExercisesRepository(application);
         allExercises = repository.getAllExercises();
 
     }
