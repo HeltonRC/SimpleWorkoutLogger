@@ -11,10 +11,12 @@ import java.util.Date;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
 @Entity(
         tableName = "work_exercises_join",
-        primaryKeys = { "workoutId", "exerciseId" },
+        indices = {@Index(value = {"workoutId", "exerciseId"},unique = true)},
         foreignKeys = {
                 @ForeignKey(entity = Workout.class,
                         parentColumns = "id",
@@ -23,8 +25,9 @@ import androidx.room.ForeignKey;
                         parentColumns = "id",
                         childColumns = "exerciseId")
         })
-
 public class WorkExerciseJoin {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private int workoutId;
     private int exerciseId;
 
@@ -40,6 +43,14 @@ public class WorkExerciseJoin {
         this.logDate = logDate;
         this.exerciseName = exerciseName;
         this.repetitions = repetitions;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getWorkoutId() {

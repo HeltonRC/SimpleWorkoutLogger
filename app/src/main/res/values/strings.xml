@@ -5,4 +5,12 @@
     <string name="please_login"><![CDATA[Please imput your user name & passwork to sign in.]]></string>
     <string name="welcome_back">Welcome Back.</string>
     <string name="repetitions">Repetitions:</string>
+    <string name="routines_title">Routines</string>
+    <string name="new_routine_alert_title">New Routine</string>
+    <string name="please_imput_routine_name">Please imput the name for the new routine.</string>
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="action_delete_routine">Delete Routine</string>
+    <string name="add_exercise">Add exercises to this routine.</string>
+    <string name="add_exercise_tolist">Add exercise.</string>
 </resources>

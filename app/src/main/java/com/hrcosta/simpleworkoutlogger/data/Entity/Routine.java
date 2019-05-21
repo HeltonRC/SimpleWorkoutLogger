@@ -1,5 +1,8 @@
 package com.hrcosta.simpleworkoutlogger.data.Entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 import androidx.room.Entity;
@@ -7,14 +10,11 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "routine_table")
-public class Routine {
+public class Routine implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String routine_name;
-
-    @Ignore
-    private List<Exercise> exercisesList;
 
 
     public Routine(String routine_name) {
@@ -37,11 +37,33 @@ public class Routine {
         this.routine_name = routine_name;
     }
 
-    public List<Exercise> getExercisesList() {
-        return exercisesList;
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setExercisesList(List<Exercise> exercisesList) {
-        this.exercisesList = exercisesList;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.routine_name);
     }
+
+    @Ignore
+    protected Routine(Parcel in) {
+        this.id = in.readInt();
+        this.routine_name = in.readString();
+    }
+
+    public static final Parcelable.Creator<Routine> CREATOR = new Parcelable.Creator<Routine>() {
+        @Override
+        public Routine createFromParcel(Parcel source) {
+            return new Routine(source);
+        }
+
+        @Override
+        public Routine[] newArray(int size) {
+            return new Routine[size];
+        }
+    };
 }

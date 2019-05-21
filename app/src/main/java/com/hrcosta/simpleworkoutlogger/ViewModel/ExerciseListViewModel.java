@@ -20,7 +20,6 @@ public class ExerciseListViewModel extends AndroidViewModel {
         super(application);
         repository = new ExercisesRepository(application);
         allExercises = repository.getAllExercises();
-
     }
 
     public void Insert(Exercise exercise) {
@@ -37,6 +36,10 @@ public class ExerciseListViewModel extends AndroidViewModel {
 
     public void DeleteAllExercises() {
         repository.deleteAllExercises();
+    }
+
+    public LiveData<List<Exercise>> getAllExercises (){
+        return repository.getAllExercises();
     }
 
 }

@@ -5,9 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
 import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
-import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +31,6 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
         WorkExerciseJoin exerciseDone = exerciseDoneList.get(position);
         holder.tvName.setText(exerciseDone.getExerciseName());
         holder.tvDetails.setText(String.valueOf(exerciseDone.getRepetitions()));
-
     }
 
     @Override

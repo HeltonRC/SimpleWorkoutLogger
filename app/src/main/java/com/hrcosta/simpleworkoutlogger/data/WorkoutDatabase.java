@@ -6,11 +6,13 @@ import android.util.Log;
 
 import com.hrcosta.simpleworkoutlogger.data.DAO.ExerciseDao;
 import com.hrcosta.simpleworkoutlogger.data.DAO.RoutineDao;
+import com.hrcosta.simpleworkoutlogger.data.DAO.RoutineExerciseJoinDao;
 import com.hrcosta.simpleworkoutlogger.data.DAO.UserDao;
 import com.hrcosta.simpleworkoutlogger.data.DAO.WorkExerciseJoinDao;
 import com.hrcosta.simpleworkoutlogger.data.DAO.WorkoutDao;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Routine;
+import com.hrcosta.simpleworkoutlogger.data.Entity.RoutineExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.User;
 import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
@@ -27,7 +29,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Exercise.class, User.class, Workout.class, WorkExerciseJoin.class}, version = 1)
+@Database(entities = {Exercise.class, User.class, Workout.class, WorkExerciseJoin.class, Routine.class, RoutineExerciseJoin.class}, version = 1)
 @TypeConverters(DateConverter.class)
 public abstract class WorkoutDatabase extends RoomDatabase {
 
@@ -37,6 +39,7 @@ public abstract class WorkoutDatabase extends RoomDatabase {
 
     public abstract ExerciseDao exerciseDao();
     public abstract RoutineDao routineDao();
+    public abstract RoutineExerciseJoinDao routineExerciseJoinDao();
     public abstract UserDao userDao();
     public abstract WorkoutDao workoutDao();
     public abstract WorkExerciseJoinDao workExerciseJoinDao();
@@ -68,6 +71,7 @@ public abstract class WorkoutDatabase extends RoomDatabase {
         private UserDao userDao;
         private ExerciseDao exerciseDao;
         private RoutineDao routineDao;
+        private RoutineExerciseJoinDao routineExerciseJoinDao;
         private WorkoutDao workoutDao;
         private WorkExerciseJoinDao workExerciseJoinDao;
 
@@ -75,6 +79,7 @@ public abstract class WorkoutDatabase extends RoomDatabase {
             this.userDao = db.userDao();
             this.exerciseDao = db.exerciseDao();
             this.routineDao = db.routineDao();
+            this.routineExerciseJoinDao = db.routineExerciseJoinDao();
             this.workoutDao = db.workoutDao();
             this.workExerciseJoinDao = db.workExerciseJoinDao();
 
@@ -94,8 +99,18 @@ public abstract class WorkoutDatabase extends RoomDatabase {
             int exerciseId3 = (int) exerciseDao.insert(new Exercise("exName4","exDescription4","category1"));
             int exerciseId4 = (int) exerciseDao.insert(new Exercise("exName5","exDescription5","category1"));
 
-            routineDao.insert(new Routine("routine A"));
-            routineDao.insert(new Routine("routine B"));
+            int routineA = (int) routineDao.insert(new Routine("routine A"));
+            int routineB = (int) routineDao.insert(new Routine("routine B"));
+
+            routineExerciseJoinDao.insert(new RoutineExerciseJoin(routineA,exerciseId1));
+            routineExerciseJoinDao.insert(new RoutineExerciseJoin(routineA,exerciseId2));
+            routineExerciseJoinDao.insert(new RoutineExerciseJoin(routineA,exerciseId3));
+            routineExerciseJoinDao.insert(new RoutineExerciseJoin(routineA,exerciseId4));
+            routineExerciseJoinDao.insert(new RoutineExerciseJoin(routineA,exerciseId2));
+
+            routineExerciseJoinDao.insert(new RoutineExerciseJoin(routineB,exerciseId3));
+            routineExerciseJoinDao.insert(new RoutineExerciseJoin(routineB,exerciseId2));
+            routineExerciseJoinDao.insert(new RoutineExerciseJoin(routineB,exerciseId4));
 
 
             int workoutId = (int) workoutDao.insert(new Workout("notes from workout 1"));

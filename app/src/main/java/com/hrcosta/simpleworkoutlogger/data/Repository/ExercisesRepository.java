@@ -18,10 +18,7 @@ public class ExercisesRepository {
     public ExercisesRepository(Application application) {
         WorkoutDatabase workoutDatabase = WorkoutDatabase.getInstance(application);
         exerciseDao = workoutDatabase.exerciseDao();
-
-
     }
-
 
 
     public LiveData<List<Exercise>> getAllExercises(){

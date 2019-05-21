@@ -54,4 +54,6 @@ public interface WorkoutDao {
             "WHERE workoutId=:id")
     List<WorkExerciseJoin> loadJoinsByWorkoutId(int id);
 
+    //todo colocar menu com opçao p deletar as rotinas na tela de rotinas
+
 }

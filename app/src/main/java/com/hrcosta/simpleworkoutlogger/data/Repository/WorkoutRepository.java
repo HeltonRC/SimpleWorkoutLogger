@@ -3,10 +3,16 @@ package com.hrcosta.simpleworkoutlogger.data.Repository;
 import android.app.Application;
 import android.os.AsyncTask;
 
+import com.hrcosta.simpleworkoutlogger.data.DAO.WorkExerciseJoinDao;
 import com.hrcosta.simpleworkoutlogger.data.DAO.WorkoutDao;
+import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
+import com.hrcosta.simpleworkoutlogger.data.Entity.RoutineExerciseJoin;
+import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
 import com.hrcosta.simpleworkoutlogger.data.WorkoutDatabase;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -14,17 +20,14 @@ import androidx.lifecycle.LiveData;
 public class WorkoutRepository {
 
     private WorkoutDao workoutDao;
+    private WorkExerciseJoinDao workExerciseJoinDao;
 
 
     public WorkoutRepository(Application application) {
         WorkoutDatabase workoutDatabase = WorkoutDatabase.getInstance(application);
         workoutDao = workoutDatabase.workoutDao();
+        workExerciseJoinDao = workoutDatabase.workExerciseJoinDao();
 
-    }
-
-
-    public LiveData<List<Workout>> getAllWorkouts(){
-        return workoutDao.loadAllWorkouts();
     }
 
     public void insertWorkout(Workout workout) {
@@ -42,6 +45,81 @@ public class WorkoutRepository {
     public void deleteAllWorkouts() {
         new DeleteAllWorkoutsAsyncTask(workoutDao).execute();
     }
+
+
+    public LiveData<List<WorkExerciseJoin>> getWorkExerciseJoinByDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int month = cal.get(Calendar.MONTH) +1;
+        int year = cal.get(Calendar.YEAR);
+
+        return workExerciseJoinDao.getWorkExeJoinOnDateInt(day,month,year);
+    }
+
+    public List<Date> getDatesOfEvents() {
+        return workExerciseJoinDao.getDatesOfEvents();
+    }
+
+    public List<WorkExerciseJoin> getAllWEJoin(){
+        return workExerciseJoinDao.getAllWEJoin();
+    }
+
+    public void insertWorkExerciseJoin(WorkExerciseJoin workExerciseJoin) {
+        new InsertJoinAsyncTask(workExerciseJoinDao).execute(workExerciseJoin);
+    }
+
+    public LiveData<Workout> getWorkoutByDate(Date date) {
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int month = cal.get(Calendar.MONTH) + 1;
+        int year = cal.get(Calendar.YEAR);
+        LiveData<Workout> workoutLiveData = workExerciseJoinDao.getWorkoutOnDateInt(day,month,year);
+
+        // ------ TO BE RUN IF IS REQUIRED TO FILL THE LIST OF EXERCISES INSIDE THE WORKOUT ENTITY
+//        workoutLiveData = Transformations.map(workoutLiveData, new Function<List<Workout>, List<Workout>>() {
+//            @Override
+//            public List<Workout> apply(final List<Workout> inputWorkouts) {
+//                for (Workout workout : inputWorkouts) {
+//                    //Unable to use LiveData in this request
+//                    //ref.  https://proandroiddev.com/android-room-handling-relations-using-livedata-2d892e40bd53
+//
+//                    int workoutId = workout.getId();
+//                    Log.d("TAG", "workoutId: " + String.valueOf(workoutId));
+//                    AsyncTask.execute(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            workout.setExercisesDone(workExerciseJoinDao.getExercisesListForWorkout(workout.getId()));
+//                        }
+//                    });
+//                }
+//                return inputWorkouts;
+//            }
+//        });
+
+        return workoutLiveData;
+    }
+
+
+
+
+    private static class InsertJoinAsyncTask extends AsyncTask<WorkExerciseJoin, Void, Void> {
+        private WorkExerciseJoinDao joinDao;
+
+        public InsertJoinAsyncTask(WorkExerciseJoinDao joinDao) {
+            this.joinDao = joinDao;
+        }
+
+        @Override
+        protected Void doInBackground(WorkExerciseJoin... workExerciseJoins) {
+            joinDao.insert(workExerciseJoins[0]);
+            return null;
+        }
+    }
+
 
     private static class InsertWorkoutAsyncTask extends AsyncTask<Workout, Void, Void> {
         private WorkoutDao workoutDao;
@@ -98,6 +176,8 @@ public class WorkoutRepository {
             return null;
         }
     }
+
+
 
 
 

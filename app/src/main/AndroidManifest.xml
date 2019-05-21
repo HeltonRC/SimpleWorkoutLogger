@@ -17,12 +17,16 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".CalendarActivity">
 
+
+
         </activity>
         <activity android:name=".RoutinesActivity"
             android:parentActivityName=".CalendarActivity">
 
         </activity>
-
+        <activity android:name=".ExercisesActivity"
+            android:parentActivityName=".RoutinesActivity">
+        </activity>
         <activity
             android:name=".RegisterActivity"
             android:parentActivityName=".MainActivity">

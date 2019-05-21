@@ -2,7 +2,7 @@ package com.hrcosta.simpleworkoutlogger.ViewModel;
 
 import android.app.Application;
 
-import com.hrcosta.simpleworkoutlogger.data.Repository.DataRepository;
+import com.hrcosta.simpleworkoutlogger.data.Repository.UserRepository;
 import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
 import com.hrcosta.simpleworkoutlogger.data.Repository.WorkoutRepository;
@@ -22,26 +22,22 @@ import androidx.lifecycle.Transformations;
 
 public class CalendarActivityViewModel extends AndroidViewModel {
 
-    private DataRepository workExerciseJoinRepo;
     private WorkoutRepository workoutRepository;
-    private LiveData<List<Workout>> allWorkouts;
     private LiveData<List<WorkExerciseJoin>> exerciseJoinLiveData;
     private LiveData<Workout> workoutLiveData;
     private MutableLiveData<Date> calendarDate = new MutableLiveData<Date>();
 
     public CalendarActivityViewModel(@NonNull Application application) {
         super(application);
-        workExerciseJoinRepo = new DataRepository(application);
         workoutRepository = new WorkoutRepository(application);
 
         exerciseJoinLiveData = Transformations.switchMap(calendarDate,
-                v -> workExerciseJoinRepo.getWorkExerciseJoinByDate(v));
+                v -> workoutRepository.getWorkExerciseJoinByDate(v));
 
         workoutLiveData = Transformations.switchMap(calendarDate,
-                v -> workExerciseJoinRepo.getWorkoutByDate(v));
+                v -> workoutRepository.getWorkoutByDate(v));
 
     }
-
 
     public void Insert(Workout workout) {
         workoutRepository.insertWorkout(workout);
@@ -72,11 +68,11 @@ public class CalendarActivityViewModel extends AndroidViewModel {
     }
 
     public List<WorkExerciseJoin> getAllWEJoin(){
-        return workExerciseJoinRepo.getAllWEJoin();
+        return workoutRepository.getAllWEJoin();
     }
 
     public List<Date> getDatesOfEvents() {
-        return workExerciseJoinRepo.getDatesOfEvents();
+        return workoutRepository.getDatesOfEvents();
     }
 
 

@@ -18,6 +18,7 @@
             android:background="@color/colorPrimary"
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/colorAccent"
+            app:tabMode="scrollable"
             app:tabTextColor="#FFFFFF"
             android:id="@+id/tablayout_id">
 

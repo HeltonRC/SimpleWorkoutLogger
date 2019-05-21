@@ -8,13 +8,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-public class ViewPagerAdapterRoutines extends FragmentPagerAdapter {
+public class RoutinesViewPagerAdapter extends FragmentPagerAdapter {
 
 
     private final List<Fragment> fragmentList = new ArrayList<>();
     private final List<String> titleList = new ArrayList<>();
 
-    public ViewPagerAdapterRoutines(FragmentManager fm) {
+    public RoutinesViewPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -37,7 +37,11 @@ public class ViewPagerAdapterRoutines extends FragmentPagerAdapter {
     public void AddFragment(Fragment fragment, String title) {
         fragmentList.add(fragment);
         titleList.add(title);
+    }
 
+    public void removeFragment(Fragment fragment, int position) {
+        fragmentList.remove(position);
+        titleList.remove(position);
     }
 
 

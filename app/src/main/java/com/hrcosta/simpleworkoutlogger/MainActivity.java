@@ -99,14 +99,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-//            String input = "Email: " + textInputEmail.getEditText().getText().toString();
-//            input += "\n";
-//            input += "Username: " + textInputName.getEditText().getText().toString();
-//            input += "\n";
-//            input += "Password: " + textInputPassword.getEditText().getText().toString();
-//
-//            Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
-
     }
 
     @OnClick({R.id.btn_register})

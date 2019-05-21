@@ -64,6 +64,8 @@ public class CalendarActivity extends AppCompatActivity {
     private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd-M-yyyy", Locale.getDefault());
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
 
+    //todo change the Workout Notes to an edittext allowing to update it
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,17 +95,16 @@ public class CalendarActivity extends AppCompatActivity {
 
 
         fabAddExercise.setOnClickListener(new View.OnClickListener() {
+            //start routines activity
             @Override
             public void onClick(View v) {
-                //TODO Start activity to add exercises
+                //todo pass the selected date to the routines activity
                 startActivity(new Intent(CalendarActivity.this, RoutinesActivity.class));
-
             }
         });
 
         toolbar = this.getSupportActionBar();
         toolbar.setTitle(dateFormatForMonth.format(compactCalendarView.getFirstDayOfCurrentMonth()));
-
 
 
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
@@ -140,7 +141,7 @@ public class CalendarActivity extends AppCompatActivity {
         }
 
         compactCalendarView.addEvents(events);
-
+//     snippet on how to add events to the calendar
 //        formatter.setLenient(false);
 //        Date curDate = new Date();
 //        long curMillis = curDate.getTime();
