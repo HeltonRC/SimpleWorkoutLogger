@@ -105,6 +105,7 @@ public class WorkoutRepository {
 
 
 
+    //---------------Async Tasks---------------
 
     private static class InsertJoinAsyncTask extends AsyncTask<WorkExerciseJoin, Void, Void> {
         private WorkExerciseJoinDao joinDao;

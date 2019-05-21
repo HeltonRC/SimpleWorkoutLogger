@@ -7,11 +7,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
 
 public class RoutinesViewPagerAdapter extends FragmentPagerAdapter {
 
 
-    private final List<Fragment> fragmentList = new ArrayList<>();
+    private final List<RoutinesFragment> fragmentList = new ArrayList<>();
     private final List<String> titleList = new ArrayList<>();
 
     public RoutinesViewPagerAdapter(FragmentManager fm) {
@@ -19,7 +20,7 @@ public class RoutinesViewPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public Fragment getItem(int position) {
+    public RoutinesFragment getItem(int position) {
         return fragmentList.get(position);
     }
 
@@ -34,12 +35,17 @@ public class RoutinesViewPagerAdapter extends FragmentPagerAdapter {
         return titleList.get(position);
     }
 
-    public void AddFragment(Fragment fragment, String title) {
+    @Override
+    public int getItemPosition(Object object){
+        return PagerAdapter.POSITION_NONE;
+    }
+
+    public void AddFragment(RoutinesFragment fragment, String title) {
         fragmentList.add(fragment);
         titleList.add(title);
     }
 
-    public void removeFragment(Fragment fragment, int position) {
+    public void removeFragment(RoutinesFragment fragment, int position) {
         fragmentList.remove(position);
         titleList.remove(position);
     }

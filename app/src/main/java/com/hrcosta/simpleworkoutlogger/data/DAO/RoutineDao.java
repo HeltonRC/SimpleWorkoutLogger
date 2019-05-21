@@ -10,6 +10,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
@@ -19,9 +20,6 @@ public interface RoutineDao {
 
     @Insert
     long insert(Routine routine);
-
-    @Insert(onConflict = REPLACE)
-    void saveExercisesToRoutine(List<Exercise> exercises);
 
     @Update(onConflict = REPLACE)
     void update(Routine routine);
@@ -34,5 +32,6 @@ public interface RoutineDao {
 
     @Query("SELECT * FROM routine_table ORDER BY id")
     List<Routine> loadAllRoutines();
+
 
 }

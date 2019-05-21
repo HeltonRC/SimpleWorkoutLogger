@@ -17,8 +17,6 @@ import com.hrcosta.simpleworkoutlogger.data.Entity.User;
 import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -54,7 +52,6 @@ public abstract class WorkoutDatabase extends RoomDatabase {
                     .addCallback(databaseCallback)
                     .build();
         }
-
         return instance;
     }
 
@@ -88,16 +85,16 @@ public abstract class WorkoutDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
             //userDao.insert(new User(1,"user1","user1@email.com"));
-
             Date date1 = new GregorianCalendar(2019,04,01).getTime();
             Date date2 = new GregorianCalendar(2019,04,02).getTime();
             Date date3 = new GregorianCalendar(2019,04,03).getTime();
 
 
             int exerciseId1 = (int) exerciseDao.insert(new Exercise("exName1","exDescription1","category1"));
-            int exerciseId2 = (int) exerciseDao.insert(new Exercise("exName3","exDescription3","category1"));
-            int exerciseId3 = (int) exerciseDao.insert(new Exercise("exName4","exDescription4","category1"));
-            int exerciseId4 = (int) exerciseDao.insert(new Exercise("exName5","exDescription5","category1"));
+            int exerciseId2 = (int) exerciseDao.insert(new Exercise("exName2","exDescription2","category1"));
+            int exerciseId3 = (int) exerciseDao.insert(new Exercise("exName3","exDescription3","category1"));
+            int exerciseId4 = (int) exerciseDao.insert(new Exercise("exName4","exDescription4","category1"));
+            int exerciseId5 = (int) exerciseDao.insert(new Exercise("exName5","exDescription5","category1"));
 
             int routineA = (int) routineDao.insert(new Routine("routine A"));
             int routineB = (int) routineDao.insert(new Routine("routine B"));

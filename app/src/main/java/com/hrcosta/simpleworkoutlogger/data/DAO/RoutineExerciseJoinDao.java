@@ -7,6 +7,7 @@ import java.util.List;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -15,6 +16,9 @@ public interface RoutineExerciseJoinDao {
 
     @Insert
     void insert(RoutineExerciseJoin routineExerciseJoin);
+
+    @Delete
+    void delete(RoutineExerciseJoin routineExerciseJoin);
 
     @Query("SELECT * " +
             "FROM exercise_table t1 INNER JOIN routine_exe_join t2 ON" +
@@ -25,4 +29,8 @@ public interface RoutineExerciseJoinDao {
 
     @Query("SELECT * FROM routine_exe_join")
     LiveData<List<RoutineExerciseJoin>> getAllREJoin();
+
+    @Query("DELETE FROM routine_exe_join WHERE routineId =:routineId")
+    void deleteFromRoutine(int routineId);
+
 }

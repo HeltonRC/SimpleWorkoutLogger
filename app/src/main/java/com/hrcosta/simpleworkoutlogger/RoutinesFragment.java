@@ -1,11 +1,14 @@
 package com.hrcosta.simpleworkoutlogger;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.hrcosta.simpleworkoutlogger.ViewModel.RoutinesViewModel;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
@@ -28,10 +31,14 @@ import butterknife.ButterKnife;
 public class RoutinesFragment extends Fragment {
 
 
-    private static final String ARG_ROUTINE = "routine";
+    private static final String EXTRA_ROUTINE = "routine";
+    private static final String EXTRA_ROUTINE_ID = "routineid";
+    private static final String EXTRA_EXERCISE_ID = "exerciseid";
+    private static final int ADD_EXERCISE_REQUEST = 1;
+
     View view;
     private List<Exercise> mExercisesList;
-    private Routine mRoutine;
+    private int mRoutineId;
     private RoutinesViewModel routinesViewModel;
 
     @BindView(R.id.rv_routineslist) RecyclerView mRecyclerView;
@@ -40,11 +47,11 @@ public class RoutinesFragment extends Fragment {
     public RoutinesFragment() {
     }
 
-    public static RoutinesFragment newInstance(Routine routine) {
+    public static RoutinesFragment newInstance(int routineId) {
         RoutinesFragment myFragment = new RoutinesFragment();
 
         Bundle args = new Bundle();
-        args.putParcelable(ARG_ROUTINE, routine);
+        args.putInt(EXTRA_ROUTINE_ID, routineId);
         myFragment.setArguments(args);
         return myFragment;
     }
@@ -64,11 +71,12 @@ public class RoutinesFragment extends Fragment {
 
         routinesViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(RoutinesViewModel.class);
 
-        routinesViewModel.getExercisesOfRoutine(mRoutine.getId()).observe(this, new Observer<List<Exercise>>() {
+        routinesViewModel.getExercisesOfRoutine(mRoutineId).observe(this, new Observer<List<Exercise>>() {
             @Override
             public void onChanged(List<Exercise> exercises) {
                 mExercisesList = exercises;
                 adapter.setExerciseList(exercises);
+                Toast.makeText(view.getContext(), "List updated.", Toast.LENGTH_SHORT).show();
             }
         });
         return view;
@@ -79,10 +87,8 @@ public class RoutinesFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //todo also check if there is an argument to add exercise to a specific routine
-
         if (getArguments() != null) {
-            mRoutine = getArguments().getParcelable(ARG_ROUTINE);
+            mRoutineId = getArguments().getInt(EXTRA_ROUTINE_ID);
         }
 
     }
@@ -91,17 +97,33 @@ public class RoutinesFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-
         mBtnAddExercise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),ExercisesActivity.class));
-
+                Intent intent = new Intent(getActivity(),ExercisesActivity.class);
+                intent.putExtra(EXTRA_ROUTINE_ID, mRoutineId);
+                startActivityForResult(intent,ADD_EXERCISE_REQUEST);
             }
         });
 
     }
-}
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK && requestCode == ADD_EXERCISE_REQUEST) {
+            int exerciseId = data.getExtras().getInt(EXTRA_EXERCISE_ID);
+            routinesViewModel.addExerciseToRoutine(exerciseId, mRoutineId);
+
+            }
+
+
+
+        }
+        
+    }
+
 
 
 //TODO first tab of the viewpager show all exercises... routines created will be in the second tab ahead

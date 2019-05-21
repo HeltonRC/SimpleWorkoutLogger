@@ -1,5 +1,7 @@
 package com.hrcosta.simpleworkoutlogger;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -21,10 +23,12 @@ import butterknife.ButterKnife;
 
 public class ExercisesActivity  extends AppCompatActivity {
 
+    private static final String ARG_ROUTINE_ID = "routineid";
+    private static final String ARG_EXERCISE_ID = "exerciseid";
     @BindView(R.id.rv_listexercises) RecyclerView rvListExercises;
     @BindView(R.id.ib_addexercistolist) ImageButton ibAddExercises;
-    ExerciseListViewModel mViewModel;
-
+    private ExerciseListViewModel mViewModel;
+    private int mRoutineId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,8 +37,10 @@ public class ExercisesActivity  extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        mRoutineId = (int) this.getIntent().getExtras().get(ARG_ROUTINE_ID);
+
         rvListExercises.setLayoutManager(new LinearLayoutManager(this));
-        ExercisesListAdapter adapter = new ExercisesListAdapter();
+        ExercisesListAdapter adapter = new ExercisesListAdapter(this);
 
         rvListExercises.setAdapter(adapter);
 
@@ -47,8 +53,18 @@ public class ExercisesActivity  extends AppCompatActivity {
             }
         });
 
-
-
-
     }
+
+    //todo return exercise to routine activity https://www.youtube.com/watch?v=RhGMd8SsA14&t=1s
+    protected void addExerciseToRoutine(int exerciseId){
+        Intent intent = new Intent();
+        intent.putExtra(ARG_EXERCISE_ID,exerciseId);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
+
+
+
+
+
 }

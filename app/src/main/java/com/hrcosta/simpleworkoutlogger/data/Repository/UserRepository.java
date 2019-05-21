@@ -38,6 +38,10 @@ public class UserRepository {
         new DeleteUserAsyncTask(userDao).execute(user);
     }
 
+
+
+    //---------------Async Tasks---------------
+
     private static class InsertUserAsyncTask extends AsyncTask<User, Void, Void> {
         private UserDao userDao;
 

@@ -21,8 +21,8 @@ public class RoutinesViewModel extends AndroidViewModel {
         routineRepository = new RoutineRepository(application);
     }
 
-    public void Insert(Routine routine) {
-        routineRepository.insertRoutine(routine);
+    public int Insert(Routine routine) {
+        return routineRepository.insertRoutine(routine);
     }
 
     public void Update(Routine routine) {
@@ -42,6 +42,9 @@ public class RoutinesViewModel extends AndroidViewModel {
         return routineRepository.getExercisesForRoutine(routineId);
     }
 
+    public void addExerciseToRoutine(int exerciseId, int routineId){
+         routineRepository.addExerciseToRoutine(exerciseId,routineId);
+    }
 
 
 }

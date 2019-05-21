@@ -42,6 +42,7 @@ import java.util.Locale;
 
 public class CalendarActivity extends AppCompatActivity {
 
+    private static final String DATEARG = "date";
     private Calendar currentCalender = Calendar.getInstance(Locale.getDefault());
     private boolean shouldShow = false;
 
@@ -59,9 +60,9 @@ public class CalendarActivity extends AppCompatActivity {
     @BindView(R.id.rv_calendarlist) RecyclerView recyclerView;
 
     private ActionBar toolbar;
-
+    private Date mDateSelected;
     private CalendarActivityViewModel calendarActivityViewModel;
-    private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd-M-yyyy", Locale.getDefault());
+    private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
 
     //todo change the Workout Notes to an edittext allowing to update it
@@ -87,9 +88,9 @@ public class CalendarActivity extends AppCompatActivity {
 
         calendarActivityViewModel = ViewModelProviders.of(this).get(CalendarActivityViewModel.class);
 
-        Date date = currentCalender.getTime();
-        calendarActivityViewModel.setDate(date);
-        tvDate.setText(dateFormatForDisplaying.format(date));
+        mDateSelected = currentCalender.getTime();
+        calendarActivityViewModel.setDate(mDateSelected);
+        tvDate.setText(dateFormatForDisplaying.format(mDateSelected));
 
         setupObservers(calendarListAdapter);
 
@@ -98,8 +99,9 @@ public class CalendarActivity extends AppCompatActivity {
             //start routines activity
             @Override
             public void onClick(View v) {
-                //todo pass the selected date to the routines activity
-                startActivity(new Intent(CalendarActivity.this, RoutinesActivity.class));
+                Intent intent = new Intent(CalendarActivity.this, RoutinesActivity.class);
+                intent.putExtra(DATEARG,mDateSelected);
+                startActivity(intent);
             }
         });
 
@@ -110,6 +112,7 @@ public class CalendarActivity extends AppCompatActivity {
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
+                mDateSelected = dateClicked;
                 tvDate.setText(dateFormatForDisplaying.format(dateClicked));
                 calendarActivityViewModel.setDate(dateClicked);
             }

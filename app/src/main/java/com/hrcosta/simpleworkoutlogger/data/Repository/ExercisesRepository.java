@@ -43,6 +43,8 @@ public class ExercisesRepository {
 
 
 
+
+    //---------------Async Tasks---------------
     private static class InsertExerciseAsyncTask extends AsyncTask<Exercise, Void, Void> {
         private ExerciseDao exerciseDao;
 
