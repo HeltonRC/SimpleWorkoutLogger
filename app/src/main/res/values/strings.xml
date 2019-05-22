@@ -13,4 +13,5 @@
     <string name="action_delete_routine">Delete Routine</string>
     <string name="add_exercise">Add exercises to this routine.</string>
     <string name="add_exercise_tolist">Add exercise.</string>
+    <string name="no_logs">Nothing on the date selected. =(</string>
 </resources>

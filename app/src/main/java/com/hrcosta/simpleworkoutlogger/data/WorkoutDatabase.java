@@ -103,7 +103,6 @@ public abstract class WorkoutDatabase extends RoomDatabase {
             routineExerciseJoinDao.insert(new RoutineExerciseJoin(routineA,exerciseId2));
             routineExerciseJoinDao.insert(new RoutineExerciseJoin(routineA,exerciseId3));
             routineExerciseJoinDao.insert(new RoutineExerciseJoin(routineA,exerciseId4));
-            routineExerciseJoinDao.insert(new RoutineExerciseJoin(routineA,exerciseId2));
 
             routineExerciseJoinDao.insert(new RoutineExerciseJoin(routineB,exerciseId3));
             routineExerciseJoinDao.insert(new RoutineExerciseJoin(routineB,exerciseId2));

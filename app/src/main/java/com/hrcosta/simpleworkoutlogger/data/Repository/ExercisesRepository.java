@@ -20,10 +20,14 @@ public class ExercisesRepository {
         exerciseDao = workoutDatabase.exerciseDao();
     }
 
-
     public LiveData<List<Exercise>> getAllExercises(){
         return exerciseDao.loadAllExercises();
     }
+
+    public Exercise getExerciseWithId(int id){
+        return exerciseDao.loadExerciseById(id);
+    }
+
 
     public void insertExercise(Exercise exercise) {
         new InsertExerciseAsyncTask(exerciseDao).execute(exercise);

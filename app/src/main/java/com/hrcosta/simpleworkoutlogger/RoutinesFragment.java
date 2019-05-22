@@ -117,12 +117,14 @@ public class RoutinesFragment extends Fragment {
             routinesViewModel.addExerciseToRoutine(exerciseId, mRoutineId);
 
             }
-
-
-
         }
-        
+
+    int getRoutineId() {
+        return mRoutineId;
     }
+}
+
+
 
 
 

@@ -1,7 +1,10 @@
 package com.hrcosta.simpleworkoutlogger.ViewModel;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
+import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
+import com.hrcosta.simpleworkoutlogger.data.Repository.ExercisesRepository;
 import com.hrcosta.simpleworkoutlogger.data.Repository.UserRepository;
 import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
@@ -16,13 +19,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-/*
-    View Model class that will load the data required in the calendar view.
-*/
 
 public class CalendarActivityViewModel extends AndroidViewModel {
 
     private WorkoutRepository workoutRepository;
+    private ExercisesRepository exercisesRepository;
     private LiveData<List<WorkExerciseJoin>> exerciseJoinLiveData;
     private LiveData<Workout> workoutLiveData;
     private MutableLiveData<Date> calendarDate = new MutableLiveData<Date>();
@@ -30,6 +31,7 @@ public class CalendarActivityViewModel extends AndroidViewModel {
     public CalendarActivityViewModel(@NonNull Application application) {
         super(application);
         workoutRepository = new WorkoutRepository(application);
+        exercisesRepository = new ExercisesRepository(application);
 
         exerciseJoinLiveData = Transformations.switchMap(calendarDate,
                 v -> workoutRepository.getWorkExerciseJoinByDate(v));
@@ -75,5 +77,40 @@ public class CalendarActivityViewModel extends AndroidViewModel {
         return workoutRepository.getDatesOfEvents();
     }
 
+
+    public void addExerciseToWorkout(int exerciseId, int workoutId, Date date) {
+        //Async task required to get the exercise details before creating the join object.
+        new AddExerciseToWorkoutAsyncTask(exercisesRepository,workoutRepository,workoutId,exerciseId,date).execute();
+    }
+
+
+    private static class AddExerciseToWorkoutAsyncTask extends AsyncTask<Void, Void, Exercise> {
+        private ExercisesRepository exercisesRepository;
+        private WorkoutRepository workoutRepository;
+        private int workoutId;
+        private int exerciseId;
+        private Date date;
+
+        AddExerciseToWorkoutAsyncTask(ExercisesRepository exRepository, WorkoutRepository workRepository,
+                                      int workoutId, int exerciseId, Date date) {
+            this.exercisesRepository = exRepository;
+            this.workoutRepository = workRepository;
+            this.workoutId = workoutId;
+            this.exerciseId = exerciseId;
+            this.date = date;
+        }
+
+        @Override
+        protected Exercise doInBackground(Void... voids) {
+            return exercisesRepository.getExerciseWithId(exerciseId);
+        }
+
+        @Override
+        protected void onPostExecute(Exercise exercise) {
+            super.onPostExecute(exercise);
+            WorkExerciseJoin workExerciseJoin = new WorkExerciseJoin(workoutId,exercise.getId(),date,exercise.getExName(),0);
+            workoutRepository.insertWorkExerciseJoin(workExerciseJoin);
+        }
+    }
 
 }

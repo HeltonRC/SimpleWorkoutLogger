@@ -31,6 +31,5 @@ public interface ExerciseDao {
     LiveData<List<Exercise>> loadAllExercises();
 
     @Query("SELECT * FROM exercise_table WHERE id = :id")
-    LiveData<Exercise> loadExerciseById(int id);
-
+    Exercise loadExerciseById(int id);
 }

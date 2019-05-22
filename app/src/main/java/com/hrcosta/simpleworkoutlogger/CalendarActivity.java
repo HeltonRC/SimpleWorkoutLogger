@@ -1,6 +1,7 @@
 package com.hrcosta.simpleworkoutlogger;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -43,6 +45,8 @@ import java.util.Locale;
 public class CalendarActivity extends AppCompatActivity {
 
     private static final String DATEARG = "date";
+    private static final int ADD_EXERCISE_REQUEST = 1;
+    private static final String EXTRA_EXERCISE_ID = "exerciseid";
     private Calendar currentCalender = Calendar.getInstance(Locale.getDefault());
     private boolean shouldShow = false;
 
@@ -61,6 +65,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     private ActionBar toolbar;
     private Date mDateSelected;
+    private int mCurrentWorkoutId;
     private CalendarActivityViewModel calendarActivityViewModel;
     private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
@@ -101,7 +106,7 @@ public class CalendarActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(CalendarActivity.this, RoutinesActivity.class);
                 intent.putExtra(DATEARG,mDateSelected);
-                startActivity(intent);
+                startActivityForResult(intent,ADD_EXERCISE_REQUEST);
             }
         });
 
@@ -134,7 +139,6 @@ public class CalendarActivity extends AppCompatActivity {
 
 
     private void addEventIndicators() {
-
         List<Date> dates = calendarActivityViewModel.getDatesOfEvents();
         List<Event> events = new ArrayList<>();
 
@@ -172,8 +176,9 @@ public class CalendarActivity extends AppCompatActivity {
                 if (workout!=null) {
                     tvListTitle.setText(getResources().getString(R.string.exercises_completed));
                     tvDetails.setText(workout.getNotes());
+                    mCurrentWorkoutId = workout.getId();
                 } else {
-                    tvDetails.setText("Nothing today =(");
+                    tvDetails.setText(R.string.no_logs);
                 }
             }
         });
@@ -187,6 +192,19 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK && requestCode == ADD_EXERCISE_REQUEST) {
+            int exerciseId = data.getExtras().getInt(EXTRA_EXERCISE_ID);
+
+            //TODO CHECK IF WORKOUTID IS NULL OR 0, HAVE TO CREATE A NEW ONE.
+            calendarActivityViewModel.addExerciseToWorkout(exerciseId,mCurrentWorkoutId,mDateSelected);
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

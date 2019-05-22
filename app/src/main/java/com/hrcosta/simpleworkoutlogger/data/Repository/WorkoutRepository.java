@@ -79,30 +79,8 @@ public class WorkoutRepository {
         int year = cal.get(Calendar.YEAR);
         LiveData<Workout> workoutLiveData = workExerciseJoinDao.getWorkoutOnDateInt(day,month,year);
 
-        // ------ TO BE RUN IF IS REQUIRED TO FILL THE LIST OF EXERCISES INSIDE THE WORKOUT ENTITY
-//        workoutLiveData = Transformations.map(workoutLiveData, new Function<List<Workout>, List<Workout>>() {
-//            @Override
-//            public List<Workout> apply(final List<Workout> inputWorkouts) {
-//                for (Workout workout : inputWorkouts) {
-//                    //Unable to use LiveData in this request
-//                    //ref.  https://proandroiddev.com/android-room-handling-relations-using-livedata-2d892e40bd53
-//
-//                    int workoutId = workout.getId();
-//                    Log.d("TAG", "workoutId: " + String.valueOf(workoutId));
-//                    AsyncTask.execute(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            workout.setExercisesDone(workExerciseJoinDao.getExercisesListForWorkout(workout.getId()));
-//                        }
-//                    });
-//                }
-//                return inputWorkouts;
-//            }
-//        });
-
         return workoutLiveData;
     }
-
 
 
     //---------------Async Tasks---------------

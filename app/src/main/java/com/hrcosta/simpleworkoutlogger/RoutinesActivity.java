@@ -1,6 +1,8 @@
 package com.hrcosta.simpleworkoutlogger;
 
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
@@ -32,6 +34,7 @@ import butterknife.ButterKnife;
 public class RoutinesActivity extends AppCompatActivity {
 
     private static final String DATEARG = "date";
+    private static final String ARG_EXERCISE_ID = "exerciseid";
     @BindView(R.id.tablayout_id) TabLayout tabLayout;
     @BindView(R.id.viewpager_id) ViewPager viewPager;
     @BindView(R.id.btn_addtab) ImageButton btnAddTab;
@@ -80,24 +83,21 @@ public class RoutinesActivity extends AppCompatActivity {
 
 
     private void deleteSelectedRoutine() {
-
         int position = viewPager.getCurrentItem();
-        Routine routine = mRoutines.get(position);
+
+        //getting the routine id of the current fragment
+        RoutinesFragment fragment = (RoutinesFragment) mAdapter.instantiateItem(viewPager, position);
+        int routineId = fragment.getRoutineId();
+        Routine routine = null;
+        for (Routine r : mRoutines){
+            if (r.getId() == routineId){
+                routine = r;
+            }
+        }
+
 
         mRoutinesViewModel.Delete(routine);
-
-
         new loadAllExercisesAsyncTask(this, mRoutinesViewModel).execute();
-//
-//        mRoutines.remove(position);
-//
-//        RoutinesFragment currentFragment  = mAdapter.getItem(position);
-//        mAdapter.removeFragment(currentFragment,position);
-//
-//        mAdapter.notifyDataSetChanged();
-//        if (position > 0) {
-//            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1, true);
-//        }
 
     }
 
@@ -105,14 +105,16 @@ public class RoutinesActivity extends AppCompatActivity {
 
     private void updateFragments(List<Routine> routines) {
 
+        mAdapter = new RoutinesViewPagerAdapter(getSupportFragmentManager());
         mRoutines = routines;
-        viewPager.setAdapter(mAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
         for (Routine r : routines) {
             mAdapter.AddFragment(RoutinesFragment.newInstance(r.getId()), r.getRoutine_name());
             mAdapter.notifyDataSetChanged();
         }
+
+        viewPager.setAdapter(mAdapter);
 
         btnAddTab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,8 +141,12 @@ public class RoutinesActivity extends AppCompatActivity {
 
     }
 
-
-
+    public void addExerciseToCalendar(int exerciseId) {
+        Intent intent = new Intent();
+        intent.putExtra(ARG_EXERCISE_ID,exerciseId);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
 
 
     private static class loadAllExercisesAsyncTask extends AsyncTask<Void, Void, Void> {

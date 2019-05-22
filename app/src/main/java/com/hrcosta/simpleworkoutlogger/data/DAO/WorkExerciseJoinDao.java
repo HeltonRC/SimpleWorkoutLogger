@@ -18,7 +18,7 @@ public interface WorkExerciseJoinDao {
     @Insert
     void insert(WorkExerciseJoin workExerciseJoin);
 
-    //TODO check if delete and update is necessary
+    //TODO delete and update may be necessary
 
     @Query("SELECT * " +
             "FROM exercise_table t1 INNER JOIN work_exercises_join t2 ON" +

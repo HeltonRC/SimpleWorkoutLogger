@@ -55,7 +55,6 @@ public class ExercisesActivity  extends AppCompatActivity {
 
     }
 
-    //todo return exercise to routine activity https://www.youtube.com/watch?v=RhGMd8SsA14&t=1s
     protected void addExerciseToRoutine(int exerciseId){
         Intent intent = new Intent();
         intent.putExtra(ARG_EXERCISE_ID,exerciseId);

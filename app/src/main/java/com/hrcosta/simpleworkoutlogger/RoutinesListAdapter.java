@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
@@ -30,6 +31,18 @@ public class RoutinesListAdapter extends RecyclerView.Adapter<RoutinesListAdapte
         View view;
         view = LayoutInflater.from(mContext).inflate(R.layout.list_item_exercises,parent,false);
         RoutinesViewHolder routinesViewHolder = new RoutinesViewHolder(view);
+
+        routinesViewHolder.llListExercises.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Exercise exercise = exerciseList.get(routinesViewHolder.getAdapterPosition());
+                if (mContext instanceof RoutinesActivity) {
+                    ((RoutinesActivity) mContext).addExerciseToCalendar(exercise.getId());
+                }
+            }
+        });
+
+
         return routinesViewHolder;
     }
 
@@ -53,14 +66,13 @@ public class RoutinesListAdapter extends RecyclerView.Adapter<RoutinesListAdapte
 
 
     static class RoutinesViewHolder extends RecyclerView.ViewHolder {
-
         private TextView tvExerciseName;
+        private LinearLayout llListExercises;
 
         public RoutinesViewHolder(@NonNull View itemView) {
             super(itemView);
-
             tvExerciseName = itemView.findViewById(R.id.tv_exercisename);
-
+            llListExercises = itemView.findViewById(R.id.ll_list_item_exe);
         }
     }
 

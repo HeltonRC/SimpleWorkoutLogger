@@ -2,6 +2,8 @@ package com.hrcosta.simpleworkoutlogger.data.Repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.hrcosta.simpleworkoutlogger.data.DAO.RoutineDao;
 import com.hrcosta.simpleworkoutlogger.data.DAO.RoutineExerciseJoinDao;
@@ -14,6 +16,8 @@ import java.util.List;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Transaction;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class RoutineRepository {
 
@@ -64,15 +68,7 @@ public class RoutineRepository {
     }
 
     public void deleteRoutine(Routine routine) {
-        //TODO run it in a asynctask
-        mDatabase.runInTransaction(() -> {
-            try {
-                routineExerciseJoinDao.deleteFromRoutine(routine.getId());
-                routineDao.delete(routine);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+        new RoutineRepository.DeleteRoutineAsyncTask(mDatabase).execute(routine);
     }
 
 
@@ -80,12 +76,6 @@ public class RoutineRepository {
     private static class InsertRoutineAsyncTask extends AsyncTask<Routine, Void, Integer> {
         private RoutineDao routineDao;
         private int routineId;
-//        private ResultListener listener;
-//
-//        //listener interface
-//        public interface ResultListener {
-//            void ResultListener(int result);
-//        }
 
         public InsertRoutineAsyncTask(RoutineDao routineDao) {
             this.routineDao = routineDao;
@@ -117,33 +107,34 @@ public class RoutineRepository {
         }
     }
 
-//    private static class DeleteRoutineAsyncTask extends AsyncTask<Routine, Void, Void> {
-//        private RoutineDao routineDao;
-//        private RoutineExerciseJoinDao joinDao;
-//
-//        public DeleteRoutineAsyncTask(RoutineDao routineDao, RoutineExerciseJoinDao joinDao) {
-//            this.routineDao = routineDao;
-//            this.joinDao = joinDao;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Routine... routines) {
-//            try {
-//                workoutDatabase.runInTransaction(new Runnable(){
-//                    @Override
-//                    public void run(){
-//                        Access all your daos here
-//                    }
-//                });
-//
-//
-//                routineDao.delete(routines[0]);
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
-//            return null;
-//        }
-//    }
+    private static class DeleteRoutineAsyncTask extends AsyncTask<Routine, Void, Void> {
+        private WorkoutDatabase database;
+        private RoutineDao routineDao;
+        private RoutineExerciseJoinDao joinDao;
+
+        public DeleteRoutineAsyncTask(WorkoutDatabase database) {
+            this.database = database;
+            this.routineDao = database.routineDao();
+            this.joinDao = database.routineExerciseJoinDao();
+        }
+
+        @Override
+        protected Void doInBackground(Routine... routines) {
+            database.runInTransaction(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            joinDao.deleteFromRoutine(routines[0].getId());
+                            routineDao.delete(routines[0]);
+                        } catch (Exception ex) {
+                            Log.d(TAG, "Error deleting routine.");
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+            return null;
+        }
+    }
 
 
     private static class AddExerciseToRoutineAsyncTask extends AsyncTask<RoutineExerciseJoin, Void, Void> {
