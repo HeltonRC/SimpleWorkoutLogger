@@ -68,9 +68,6 @@ public class WorkoutRepository {
         return workExerciseJoinDao.getAllWEJoin();
     }
 
-    public void insertWorkExerciseJoin(WorkExerciseJoin workExerciseJoin) {
-        new InsertJoinAsyncTask(workExerciseJoinDao).execute(workExerciseJoin);
-    }
 
     public LiveData<Workout> getWorkoutByDate(Date date) {
 
@@ -94,6 +91,10 @@ public class WorkoutRepository {
 
     public void updateRepsInWorkoutExercise(WorkExerciseJoin workExerciseJoin, int reps) {
         new UpdateWEJoinAsyncTask(workExerciseJoinDao,workExerciseJoin,reps).execute();
+    }
+
+    public void updateWorkoutNote(Workout workout, String note) {
+        new UpdateWorkoutNoteAsyncTask(workoutDao, workout, note).execute();
     }
 
 
@@ -141,25 +142,10 @@ public class WorkoutRepository {
 
     }
 
-    private static class InsertJoinAsyncTask extends AsyncTask<WorkExerciseJoin, Void, Void> {
-        private WorkExerciseJoinDao workExerciseJoinDao;
-
-        public InsertJoinAsyncTask(WorkExerciseJoinDao joinDao) {
-            this.workExerciseJoinDao = joinDao;
-        }
-
-        @Override
-        protected Void doInBackground(WorkExerciseJoin... workExerciseJoins) {
-            workExerciseJoinDao.insert(workExerciseJoins[0]);
-            return null;
-        }
-    }
-
-
     private static class InsertWorkoutAsyncTask extends AsyncTask<Workout, Void, Long> {
         private WorkoutDao workoutDao;
 
-        public InsertWorkoutAsyncTask(WorkoutDao workoutDao) {
+        InsertWorkoutAsyncTask(WorkoutDao workoutDao) {
             this.workoutDao = workoutDao;
         }
 
@@ -177,7 +163,7 @@ public class WorkoutRepository {
     private static class UpdateWorkoutAsyncTask extends AsyncTask<Workout, Void, Void> {
         private WorkoutDao workoutDao;
 
-        public UpdateWorkoutAsyncTask(WorkoutDao workoutDao) {
+        UpdateWorkoutAsyncTask(WorkoutDao workoutDao) {
             this.workoutDao = workoutDao;
         }
 
@@ -191,7 +177,7 @@ public class WorkoutRepository {
     private static class DeleteWorkoutAsyncTask extends AsyncTask<Workout, Void, Void> {
         private WorkoutDao workoutDao;
 
-        public DeleteWorkoutAsyncTask(WorkoutDao workoutDao) {
+        DeleteWorkoutAsyncTask(WorkoutDao workoutDao) {
             this.workoutDao = workoutDao;
         }
 
@@ -205,7 +191,7 @@ public class WorkoutRepository {
     private static class DeleteAllWorkoutsAsyncTask extends AsyncTask<Void, Void, Void> {
         private WorkoutDao workoutDao;
 
-        public DeleteAllWorkoutsAsyncTask(WorkoutDao workoutDao) {
+        DeleteAllWorkoutsAsyncTask(WorkoutDao workoutDao) {
             this.workoutDao = workoutDao;
         }
 
@@ -219,7 +205,7 @@ public class WorkoutRepository {
     private static class DeleteWorkoutExerciseJoinAsyncTask extends AsyncTask<WorkExerciseJoin, Void, Void> {
         private WorkExerciseJoinDao workExerciseJoinDao;
 
-        public DeleteWorkoutExerciseJoinAsyncTask(WorkExerciseJoinDao workExerciseJoinDao) {
+        DeleteWorkoutExerciseJoinAsyncTask(WorkExerciseJoinDao workExerciseJoinDao) {
             this.workExerciseJoinDao = workExerciseJoinDao;
         }
 
@@ -235,7 +221,7 @@ public class WorkoutRepository {
         private WorkExerciseJoin workExerciseJoin;
         private int reps;
 
-        public UpdateWEJoinAsyncTask(WorkExerciseJoinDao workExerciseJoinDao, WorkExerciseJoin workExerciseJoin, int reps) {
+        UpdateWEJoinAsyncTask(WorkExerciseJoinDao workExerciseJoinDao, WorkExerciseJoin workExerciseJoin, int reps) {
             this.workExerciseJoinDao = workExerciseJoinDao;
             this.workExerciseJoin = workExerciseJoin;
             this.reps = reps;
@@ -248,4 +234,22 @@ public class WorkoutRepository {
         }
     }
 
+    private static class UpdateWorkoutNoteAsyncTask extends AsyncTask<Void,Void,Void> {
+        private WorkoutDao workoutDao;
+        private Workout workout;
+        private String note;
+
+
+        UpdateWorkoutNoteAsyncTask(WorkoutDao workoutDao, Workout workout, String note) {
+            this.workoutDao = workoutDao;
+            this.workout = workout;
+            this.note = note;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            workoutDao.saveNoteToWorkout(workout.getId(),note);
+            return null;
+        }
+    }
 }

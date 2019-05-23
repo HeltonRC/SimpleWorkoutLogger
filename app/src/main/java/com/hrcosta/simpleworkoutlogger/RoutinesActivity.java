@@ -58,7 +58,16 @@ public class RoutinesActivity extends AppCompatActivity {
         mRoutinesViewModel = ViewModelProviders.of(this).get(RoutinesViewModel.class);
         mAdapter = new RoutinesViewPagerAdapter(getSupportFragmentManager());
 
-        mSelectedDate = (Date) this.getIntent().getExtras().get(DATEARG);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle!=null){
+            if (bundle.containsKey(DATEARG)){
+                mSelectedDate = (Date) this.getIntent().getExtras().get(DATEARG);
+                mRoutinesViewModel.setDateSelected(mSelectedDate);
+            }
+        } else {
+            mSelectedDate = mRoutinesViewModel.getDateSelected();
+        }
+
         toolbar = this.getSupportActionBar();
         toolbar.setTitle(dateFormatForDisplaying.format(mSelectedDate));
 
@@ -175,29 +184,6 @@ public class RoutinesActivity extends AppCompatActivity {
     }
 
 
-//    private static class insertRoutineAsyncTask extends AsyncTask<Routine, Void, Void> {
-//        private RoutinesViewModel routinesViewModel;
-//        private RoutinesActivity activity;
-//        private Routine routine;
-//
-//
-//        public insertRoutineAsyncTask(RoutinesActivity activity, RoutinesViewModel routinesViewModel) {
-//            this.activity = activity;
-//            this.routinesViewModel = routinesViewModel;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Routine... routines) {
-//            routine = routines[0];
-//            int routineId = routinesViewModel.Insert(routine);
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void aVoid) {
-//            super.onPostExecute(aVoid);
-//            activity.updateFragments(routineList);
-//        }
-//    }
+
 }
 

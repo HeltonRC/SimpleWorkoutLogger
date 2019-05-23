@@ -14,27 +14,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:windowSoftInputMode="stateAlwaysHidden"
         tools:ignore="GoogleAppIndexingWarning">
+        <receiver android:name=".WorkoutAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
 
-        <activity android:name=".CalendarActivity"
-            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/workout_app_widget_info" />
+        </receiver>
 
-        </activity>
-        <activity android:name=".RoutinesActivity"
-            android:parentActivityName=".CalendarActivity">
-
-        </activity>
-        <activity android:name=".ExercisesActivity"
-            android:parentActivityName=".RoutinesActivity">
-        </activity>
+        <activity android:name=".CalendarActivity"></activity>
+        <activity
+            android:name=".RoutinesActivity"
+            android:parentActivityName=".CalendarActivity"></activity>
+        <activity
+            android:name=".ExercisesActivity"
+            android:parentActivityName=".RoutinesActivity"></activity>
         <activity
             android:name=".RegisterActivity"
-            android:parentActivityName=".MainActivity">
-
-        </activity>
+            android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

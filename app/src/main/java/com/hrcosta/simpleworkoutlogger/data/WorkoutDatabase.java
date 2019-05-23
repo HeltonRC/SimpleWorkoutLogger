@@ -84,17 +84,22 @@ public abstract class WorkoutDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            //userDao.insert(new User(1,"user1","user1@email.com"));
             Date date1 = new GregorianCalendar(2019,04,01).getTime();
             Date date2 = new GregorianCalendar(2019,04,02).getTime();
-            Date date3 = new GregorianCalendar(2019,04,03).getTime();
 
+            int exerciseId1 = (int) exerciseDao.insert(new Exercise("Leg extension","Leg exercise","Quadriceps"));
+            int exerciseId2 = (int) exerciseDao.insert(new Exercise("Leg press","Leg exercise","Quadriceps"));
+            int exerciseId3 = (int) exerciseDao.insert(new Exercise("Lunge","Leg exercise","Quadriceps"));
+            int exerciseId4 = (int) exerciseDao.insert(new Exercise("Squat","Leg exercise","Quadriceps"));
+            int exerciseId5 = (int) exerciseDao.insert(new Exercise("Good-morning","Leg exercise","Hamstrings"));
+            int exerciseId6 = (int) exerciseDao.insert(new Exercise("Leg curl","Leg exercise","Hamstrings"));
+            int exerciseId7 = (int) exerciseDao.insert(new Exercise("Deadlift","Leg exercise","Hamstrings"));
+            int exerciseId8 = (int) exerciseDao.insert(new Exercise("Calf raise","Calves exercise","Calves"));
+            int exerciseId9 = (int) exerciseDao.insert(new Exercise("Bench press","Chest exercise","Pectorals"));
+            int exerciseId10= (int) exerciseDao.insert(new Exercise("Chest fly","Chest exercise","Pectorals"));
+            int exerciseId11= (int) exerciseDao.insert(new Exercise("Dips","Chest exercise","Pectorals"));
+            int exerciseId12= (int) exerciseDao.insert(new Exercise("Machine fly","Chest exercise","Pectorals"));
 
-            int exerciseId1 = (int) exerciseDao.insert(new Exercise("exName1","exDescription1","category1"));
-            int exerciseId2 = (int) exerciseDao.insert(new Exercise("exName2","exDescription2","category1"));
-            int exerciseId3 = (int) exerciseDao.insert(new Exercise("exName3","exDescription3","category1"));
-            int exerciseId4 = (int) exerciseDao.insert(new Exercise("exName4","exDescription4","category1"));
-            int exerciseId5 = (int) exerciseDao.insert(new Exercise("exName5","exDescription5","category1"));
 
             int routineA = (int) routineDao.insert(new Routine("routine A"));
             int routineB = (int) routineDao.insert(new Routine("routine B"));
@@ -110,19 +115,14 @@ public abstract class WorkoutDatabase extends RoomDatabase {
 
 
             int workoutId = (int) workoutDao.insert(new Workout("notes from workout 1"));
-            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId1,date1,"exName1",10));
-            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId2,date1,"exName2",10));
-            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId3,date1,"exName3",13));
+            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId1,date1,"Leg extension",10));
+            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId2,date1,"Leg press",10));
+            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId3,date1,"Lunge",13));
 
             workoutId = (int) workoutDao.insert(new Workout("notes from workout 2"));
-            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId2,date2,"exName2",10));
+            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId2,date2,"Leg press",10));
             workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId3,date2,"exName3",14));
-            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId4,date2,"exName4",10));
-
-            workoutId = (int) workoutDao.insert(new Workout("notes from workout 3"));
-            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId3,date3,"exName3",10));
-            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId4,date3,"exName4",11));
-            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId2,date3,"exName2",12));
+            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId4,date2,"Squat",10));
 
 
             return null;

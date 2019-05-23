@@ -25,9 +25,6 @@ public interface WorkoutDao {
     @Insert
     long insert(Workout workout);
 
-    @Insert(onConflict = REPLACE)
-    void saveExercises(List<Exercise> exercises);
-
     @Update(onConflict = REPLACE)
     void update(Workout workout);
 
@@ -48,10 +45,11 @@ public interface WorkoutDao {
             "WHERE id=:id")
     Integer loadWorkoutIdById(int id);
 
-
     @Query("SELECT * " +
             "FROM work_exercises_join " +
             "WHERE workoutId=:id")
     List<WorkExerciseJoin> loadJoinsByWorkoutId(int id);
 
+    @Query("UPDATE workout_table SET notes=:note WHERE id = :id")
+    void saveNoteToWorkout(int id, String note);
 }

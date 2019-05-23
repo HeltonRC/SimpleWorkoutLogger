@@ -13,9 +13,7 @@ import com.hrcosta.simpleworkoutlogger.data.Entity.RoutineExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.WorkoutDatabase;
 
 import java.util.List;
-
 import androidx.lifecycle.LiveData;
-import androidx.room.Transaction;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -38,10 +36,6 @@ public class RoutineRepository {
 
     public LiveData<List<Exercise>> getExercisesForRoutine(int routine) {
         return routineExerciseJoinDao.getExercisesForRoutine(routine);
-    }
-
-    public LiveData<List<RoutineExerciseJoin>> getRoutinesExeJoins() {
-        return routineExerciseJoinDao.getAllREJoin();
     }
 
     public void addExerciseToRoutine(int exerciseId, int routineId){

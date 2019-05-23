@@ -21,9 +21,11 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -35,6 +37,7 @@ import com.github.sundeepk.compactcalendarview.domain.Event;
 
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.hrcosta.simpleworkoutlogger.Adapters.CalendarListAdapter;
@@ -55,9 +58,11 @@ public class CalendarActivity extends AppCompatActivity {
     private static final String DATEARG = "date";
     private static final int ADD_EXERCISE_REQUEST = 1;
     private static final String EXTRA_EXERCISE_ID = "exerciseid";
+    private static final String STATE_DATE = "state_date";
+    private static final String STATE_WORKOUT = "state_workout";
     private Calendar currentCalender = Calendar.getInstance(Locale.getDefault());
     private boolean shouldShow = false;
-
+    private String mUser;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
 
@@ -66,18 +71,21 @@ public class CalendarActivity extends AppCompatActivity {
     @BindView(R.id.tv_date) TextView tvDate;
     @BindView(R.id.tv_list_title) TextView tvListTitle;
     @BindView(R.id.tv_workoutnotes) TextView tvWorkoutNotes;
-
+    @BindView(R.id.btn_editnote) ImageButton btnEditNote;
     @BindView(R.id.fab_add_exercise) FloatingActionButton fabAddExercise;
     @BindView(R.id.compactcalendar_view) CompactCalendarView compactCalendarView;
     @BindView(R.id.rv_calendarlist) RecyclerView recyclerView;
 
     private ActionBar toolbar;
     private Date mDateSelected;
-    private int mCurrentWorkoutId = -1;
+    private Workout mCurrentWorkout = null;
     private CalendarActivityViewModel calendarActivityViewModel;
     private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
+    private FirebaseAnalytics mFirebaseAnalytics;
 
+    //TODO home screen widget
+    //TODO firebase analytics or admob
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,8 +94,14 @@ public class CalendarActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        tvUser.setText(firebaseUser.getEmail());
+
+        mUser = firebaseUser.getEmail();
+        tvUser.setText(mUser);
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mUser);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle);
 
         final View.OnClickListener exposeCalendarListener = getCalendarExposeLis();
         btnArrow.setOnClickListener(exposeCalendarListener);
@@ -99,12 +113,28 @@ public class CalendarActivity extends AppCompatActivity {
 
         calendarActivityViewModel = ViewModelProviders.of(this).get(CalendarActivityViewModel.class);
 
-        mDateSelected = currentCalender.getTime();
+
+
+        if (savedInstanceState != null) {
+            mDateSelected = (Date) savedInstanceState.getSerializable(STATE_DATE);
+            tvDate.setText(dateFormatForDisplaying.format(mDateSelected));
+        } else {
+            mDateSelected = currentCalender.getTime();
+        }
+
         calendarActivityViewModel.setDate(mDateSelected);
-        tvDate.setText(dateFormatForDisplaying.format(mDateSelected));
+        compactCalendarView.setCurrentDate(mDateSelected);
 
         setupObservers(calendarListAdapter);
 
+        btnEditNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCurrentWorkout !=null) {
+                    startDialogToUpdateNotes(mCurrentWorkout);
+                }
+            }
+        });
 
         fabAddExercise.setOnClickListener(new View.OnClickListener() {
             //start routines activity
@@ -134,8 +164,6 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
-
-        //TODO set onclick listener on workoutnotes to open a dialog to be able to edit the notes.
     }
 
     //onActivityResult is being used to receive the value of the routines activity.
@@ -146,8 +174,8 @@ public class CalendarActivity extends AppCompatActivity {
             int exerciseId = data.getExtras().getInt(EXTRA_EXERCISE_ID);
             calendarActivityViewModel.addExerciseToWorkout(exerciseId,mDateSelected);
         }
-
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -160,7 +188,8 @@ public class CalendarActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_logout) {
             firebaseAuth.signOut();
-            startActivity(new Intent(CalendarActivity.this,MainActivity.class));
+            startActivity(new Intent(CalendarActivity.this,MainActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -189,21 +218,26 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Exit")
-                .setMessage("Are you sure you want to exit?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setMessage(getString(R.string.exit_app_dialog))
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                        System.exit(0);
+                        moveTaskToBack(true);
+
                     }
-                }).setNegativeButton("No", null).show();
+                }).setNegativeButton(getString(R.string.no), null).show();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putSerializable(STATE_DATE, mDateSelected);
+        savedInstanceState.putParcelable(STATE_WORKOUT, mCurrentWorkout);
+        super.onSaveInstanceState(savedInstanceState);
+    }
 
     public void selectExerciseToEdit(WorkExerciseJoin workExerciseJoin) {
-        new showDialogAsyncTask(this,workExerciseJoin).execute();
+        new showExerciseDialogAsyncTask(this,workExerciseJoin).execute();
     }
-
 
     private void setupObservers(CalendarListAdapter calendarListAdapter) {
         //Get the workouts to populate the Notes for the day
@@ -213,8 +247,9 @@ public class CalendarActivity extends AppCompatActivity {
                 if (workout!=null) {
                     tvListTitle.setText(getResources().getString(R.string.exercises_completed));
                     tvWorkoutNotes.setText(workout.getNotes());
-                    mCurrentWorkoutId = workout.getId();
+                    mCurrentWorkout = workout;
                 } else {
+                    mCurrentWorkout = null;
                     tvWorkoutNotes.setText(R.string.no_logs);
                 }
             }
@@ -244,13 +279,36 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
+    private void startDialogToUpdateNotes(Workout workout) {
+        Dialog notesDialog = new Dialog(this);
+        notesDialog.setContentView(R.layout.dialog_editnotes);
+        notesDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-    private class showDialogAsyncTask extends AsyncTask<Void, Void, Exercise> {
+        TextView tvNoteDay = notesDialog.findViewById(R.id.tv_note_day);
+        TextView etNote = notesDialog.findViewById(R.id.et_work_notes);
+        Button btnSaveNote = notesDialog.findViewById(R.id.btn_editnotes);
+
+        tvNoteDay.setText(dateFormatForDisplaying.format(mDateSelected));
+        etNote.setText(workout.getNotes());
+        etNote.requestFocus();
+
+        btnSaveNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String note = etNote.getText().toString();
+                calendarActivityViewModel.updateWorkoutNote(workout,note);
+                notesDialog.dismiss();
+            }
+        });
+        notesDialog.show();
+    }
+
+    private class showExerciseDialogAsyncTask extends AsyncTask<Void, Void, Exercise> {
         Context mContext;
         Dialog myDialog;
         WorkExerciseJoin workExerciseJoin;
 
-        public showDialogAsyncTask(Context context, WorkExerciseJoin workExerciseJoin) {
+        public showExerciseDialogAsyncTask(Context context, WorkExerciseJoin workExerciseJoin) {
             this.mContext = context;
             this.workExerciseJoin = workExerciseJoin;
         }
@@ -277,6 +335,11 @@ public class CalendarActivity extends AppCompatActivity {
             tvDescription.setText(exercise.getExDescription());
             etReps.setText(String.valueOf(workExerciseJoin.getRepetitions()));
             etReps.requestFocus();
+
+//            If the keyboard is forced up it does not close along with the dialog.
+//            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
             btnRemoveEx.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -299,4 +362,7 @@ public class CalendarActivity extends AppCompatActivity {
             myDialog.show();
         }
     }
+
+
+
 }

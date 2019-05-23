@@ -116,7 +116,5 @@ public class RoutinesFragment extends Fragment {
     int getRoutineId() {
         return mRoutineId;
     }
+
 }
-
-
-//TODO first tab of the viewpager show all exercises... routines created will be in the second tab ahead

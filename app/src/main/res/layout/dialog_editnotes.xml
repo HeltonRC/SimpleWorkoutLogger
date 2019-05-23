@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#232323"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tv_note_day"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="08-08-2019"
+            android:textAlignment="textEnd"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="35dp"/>
+
+        <EditText
+            android:id="@+id/et_work_notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Notes for this workout."
+            android:lines="4"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:textAlignment="textStart"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="10dp"
+            />
+
+        <Button
+            android:id="@+id/btn_editnotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:textAlignment="textStart"
+            android:text="Update"
+            android:layout_marginTop="8dp"
+            android:drawablePadding="20dp"
+            android:drawableLeft="@drawable/ic_dumbbell"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="180dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_dumbbell"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/ic_label_white_24dp"
+        />
+
+
+</RelativeLayout>

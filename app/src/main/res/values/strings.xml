@@ -14,4 +14,11 @@
     <string name="add_exercise">Add exercises to this routine.</string>
     <string name="add_exercise_tolist">Add exercise.</string>
     <string name="no_logs">Nothing on the date selected. =(</string>
+    <string name="exercise_notes">Exercise notes:</string>
+    <string name="title_exercises_activity">Add to Routine </string>
+    <string name="exit_app_dialog">Are you sure you want to exit?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="appwidget_text">Last Workout: </string>
+    <string name="add_widget">Add widget</string>
 </resources>

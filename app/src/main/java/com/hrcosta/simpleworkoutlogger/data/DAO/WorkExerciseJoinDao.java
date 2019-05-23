@@ -22,20 +22,20 @@ public interface WorkExerciseJoinDao {
     @Delete
     void delete(WorkExerciseJoin workExerciseJoin);
 
-    @Query("SELECT * " +
-            "FROM exercise_table t1 INNER JOIN work_exercises_join t2 ON" +
-            " t1.id = t2.exerciseId WHERE " +
-            " t2.workoutId=:workoutId " +
-            "ORDER BY t2.id")
-    LiveData<List<Exercise>> getExercisesForWorkout (final int workoutId);
-
-
-    @Query("SELECT * FROM exercise_table t1 " +
-            "INNER JOIN work_exercises_join t2 " +
-            "ON t1.Id = t2.exerciseId WHERE " +
-            " t2.workoutId=:workoutId " +
-            "ORDER BY t2.id")
-    List<WorkExerciseJoin> getExercisesListForWorkout(final int workoutId);
+//    @Query("SELECT * " +
+//            "FROM exercise_table t1 INNER JOIN work_exercises_join t2 ON" +
+//            " t1.id = t2.exerciseId WHERE " +
+//            " t2.workoutId=:workoutId " +
+//            "ORDER BY t2.id")
+//    LiveData<List<Exercise>> getExercisesForWorkout (final int workoutId);
+//
+//
+//    @Query("SELECT * FROM exercise_table t1 " +
+//            "INNER JOIN work_exercises_join t2 " +
+//            "ON t1.Id = t2.exerciseId WHERE " +
+//            " t2.workoutId=:workoutId " +
+//            "ORDER BY t2.id")
+//    List<WorkExerciseJoin> getExercisesListForWorkout(final int workoutId);
 
 
     @Query("SELECT *, " +
@@ -80,4 +80,10 @@ public interface WorkExerciseJoinDao {
 
     @Query("UPDATE work_exercises_join SET repetitions=:reps WHERE id = :id")
     void updateWEJoin(int id, int reps);
+
+    @Query("")
+    List<String> getLastWorkoutForWidget();
+
+    @Query("SELECT log_date FROM work_exercises_join WHERE ????")
+    Date getLastDateOfWorkout(Date date);
 }

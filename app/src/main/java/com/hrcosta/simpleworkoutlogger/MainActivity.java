@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 import butterknife.BindView;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-      //  mAuth.getInstance().signOut();
+        Log.d("-----------------ONDESTROY MAIN ACTIVITY", "onDestroy: called");
     }
 
     @Override

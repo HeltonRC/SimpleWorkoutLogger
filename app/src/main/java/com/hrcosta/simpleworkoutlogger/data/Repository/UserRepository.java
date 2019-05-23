@@ -12,6 +12,7 @@ import java.util.List;
 
 import androidx.lifecycle.LiveData;
 
+//User classes are currently being used only for the logon, in a future version the idea is to have the userId associated with the workouts.
 
 public class UserRepository {
     private UserDao userDao;

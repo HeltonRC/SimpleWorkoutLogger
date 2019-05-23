@@ -6,6 +6,7 @@ import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Routine;
 import com.hrcosta.simpleworkoutlogger.data.Repository.RoutineRepository;
 
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import androidx.lifecycle.LiveData;
 public class RoutinesViewModel extends AndroidViewModel {
 
     private RoutineRepository routineRepository;
+    private Date mDateSelected;
 
     public RoutinesViewModel(@NonNull Application application) {
         super(application);
@@ -46,5 +48,13 @@ public class RoutinesViewModel extends AndroidViewModel {
          routineRepository.addExerciseToRoutine(exerciseId,routineId);
     }
 
+
+    public void setDateSelected(Date date) {
+        mDateSelected = date;
+    }
+
+    public Date getDateSelected() {
+        return mDateSelected;
+    }
 
 }

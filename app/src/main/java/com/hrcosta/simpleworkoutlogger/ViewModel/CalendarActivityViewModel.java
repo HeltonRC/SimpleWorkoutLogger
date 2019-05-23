@@ -96,4 +96,8 @@ public class CalendarActivityViewModel extends AndroidViewModel {
     public void updateRepsInWorkoutExercise(WorkExerciseJoin workExerciseJoin, int reps) {
         workoutRepository.updateRepsInWorkoutExercise(workExerciseJoin,reps);
     }
+
+    public void updateWorkoutNote(Workout workout, String note) {
+        workoutRepository.updateWorkoutNote(workout,note);
+    }
 }

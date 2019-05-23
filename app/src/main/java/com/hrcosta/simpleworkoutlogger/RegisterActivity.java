@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
     String passwordInput;
     String passwordInput2;
     private ProgressDialog mProgressDialog;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @BindView(R.id.textinput_email) TextInputLayout textInputEmail;
     @BindView(R.id.textinput_username) TextInputLayout textInputName;
@@ -45,6 +47,8 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         ButterKnife.bind(this);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         getSupportActionBar().setTitle("New Account");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -79,23 +83,23 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             mProgressDialog.dismiss();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(RegisterActivity.this, user + "Registered successfully, you can login now", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, user + "Registered successfully.. redirecting", Toast.LENGTH_LONG).show();
 
-                            //todo call calendar view providing the user.
+                            //Analytics event:
+                            Bundle bundle = new Bundle();
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, emailInput);
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Email");
+                            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
 
-                         // updateUI(user);
                         } else {
                             mProgressDialog.dismiss();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_LONG).show();
-                         //   updateUI(null);
+                            Toast.makeText(RegisterActivity.this, "Error: "+ task.getException().toString(), Toast.LENGTH_LONG).show();
                         }
-                        // ...
                     }
                 });
 

@@ -1,5 +1,8 @@
 package com.hrcosta.simpleworkoutlogger.data.Entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 import androidx.room.Entity;
@@ -7,15 +10,11 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity (tableName = "workout_table")
-public class Workout {
+public class Workout implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String notes;
-
-    //    @ForeignKey(entity = User.class, parentColumns = "id", childColumns = "user_id")
-    //    @ColumnInfo (name = "user_id")
-    //    private int userId;
 
 
     public Workout(String notes) {
@@ -38,4 +37,34 @@ public class Workout {
         this.notes = notes;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.notes);
+    }
+
+    protected Workout(Parcel in) {
+        this.id = in.readInt();
+        this.notes = in.readString();
+    }
+
+    public static final Parcelable.Creator<Workout> CREATOR = new Parcelable.Creator<Workout>() {
+        @Override
+        public Workout createFromParcel(Parcel source) {
+            return new Workout(source);
+        }
+
+        @Override
+        public Workout[] newArray(int size) {
+            return new Workout[size];
+        }
+    };
+
 }
+
+
