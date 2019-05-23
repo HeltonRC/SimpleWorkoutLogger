@@ -49,7 +49,6 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("New Account");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        //todo arrow not working
 
         mProgressDialog = new ProgressDialog(this);
         mAuth = FirebaseAuth.getInstance();

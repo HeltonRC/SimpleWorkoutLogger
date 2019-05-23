@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.google.android.material.tabs.TabLayout;
+import com.hrcosta.simpleworkoutlogger.Adapters.RoutinesViewPagerAdapter;
 import com.hrcosta.simpleworkoutlogger.ViewModel.RoutinesViewModel;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Routine;
 
@@ -95,7 +96,6 @@ public class RoutinesActivity extends AppCompatActivity {
             }
         }
 
-
         mRoutinesViewModel.Delete(routine);
         new loadAllExercisesAsyncTask(this, mRoutinesViewModel).execute();
 
@@ -128,6 +128,7 @@ public class RoutinesActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 mNewRoutineName = input.getText().toString();
+
                                 int routineid = mRoutinesViewModel.Insert(new Routine(mNewRoutineName));
                                 mAdapter.AddFragment(RoutinesFragment.newInstance(routineid), mNewRoutineName);
                                 mAdapter.notifyDataSetChanged();

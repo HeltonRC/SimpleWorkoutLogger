@@ -20,7 +20,7 @@ public interface RoutineExerciseJoinDao {
     @Delete
     void delete(RoutineExerciseJoin routineExerciseJoin);
 
-    @Query("SELECT * " +
+    @Query("SELECT t1.id, t1.ex_name, t1.ex_description, t1.ex_category " +
             "FROM exercise_table t1 INNER JOIN routine_exe_join t2 ON" +
             " t1.id = t2.exerciseId WHERE " +
             " t2.routineId=:routineId " +

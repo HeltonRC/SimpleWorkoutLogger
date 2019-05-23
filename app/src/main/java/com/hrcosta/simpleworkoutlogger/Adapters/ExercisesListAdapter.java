@@ -1,13 +1,14 @@
-package com.hrcosta.simpleworkoutlogger;
+package com.hrcosta.simpleworkoutlogger.Adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hrcosta.simpleworkoutlogger.ExercisesActivity;
+import com.hrcosta.simpleworkoutlogger.R;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
 
 import java.util.ArrayList;

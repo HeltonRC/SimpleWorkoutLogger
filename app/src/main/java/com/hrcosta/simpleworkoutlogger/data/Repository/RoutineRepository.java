@@ -52,6 +52,8 @@ public class RoutineRepository {
 
 
     public int insertRoutine(Routine routine) {
+
+        //TODO REFACTOR
         int result = 0;
         try {
             InsertRoutineAsyncTask task = new InsertRoutineAsyncTask(routineDao);

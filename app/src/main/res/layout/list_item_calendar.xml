@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="3dp"
-    android:elevation="4dp">
+    android:elevation="4dp"
+    android:id="@+id/cv_container">
 
 
     <LinearLayout
@@ -13,12 +14,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-
     <ImageView
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:id="@+id/iv_listicon"
-        android:src="@mipmap/ic_launcher_round"/>
+        android:src="@drawable/ic_dumbbell"
+        android:padding="10dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,7 +51,7 @@
             android:textAlignment="textEnd"/>
 
         <TextView
-            android:id="@+id/tv_details"
+            android:id="@+id/tv_listworkoutnotes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
@@ -58,6 +59,7 @@
             android:textAlignment="textEnd"/>
 
     </LinearLayout>
+
     </LinearLayout>
 
         <View

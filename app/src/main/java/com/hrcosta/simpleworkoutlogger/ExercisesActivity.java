@@ -4,9 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 
-import com.google.android.material.textfield.TextInputLayout;
+import com.hrcosta.simpleworkoutlogger.Adapters.ExercisesListAdapter;
 import com.hrcosta.simpleworkoutlogger.ViewModel.ExerciseListViewModel;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
 
@@ -55,7 +54,7 @@ public class ExercisesActivity  extends AppCompatActivity {
 
     }
 
-    protected void addExerciseToRoutine(int exerciseId){
+    public void addExerciseToRoutine(int exerciseId){
         Intent intent = new Intent();
         intent.putExtra(ARG_EXERCISE_ID,exerciseId);
         setResult(Activity.RESULT_OK, intent);

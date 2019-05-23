@@ -1,4 +1,6 @@
-package com.hrcosta.simpleworkoutlogger;
+package com.hrcosta.simpleworkoutlogger.Adapters;
+
+import com.hrcosta.simpleworkoutlogger.RoutinesFragment;
 
 import java.util.ArrayList;
 import java.util.List;

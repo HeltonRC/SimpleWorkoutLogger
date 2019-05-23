@@ -2,7 +2,6 @@ package com.hrcosta.simpleworkoutlogger;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.hrcosta.simpleworkoutlogger.Adapters.RoutinesListAdapter;
 import com.hrcosta.simpleworkoutlogger.ViewModel.RoutinesViewModel;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
-import com.hrcosta.simpleworkoutlogger.data.Entity.Routine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +29,6 @@ import butterknife.ButterKnife;
 
 public class RoutinesFragment extends Fragment {
 
-
-    private static final String EXTRA_ROUTINE = "routine";
     private static final String EXTRA_ROUTINE_ID = "routineid";
     private static final String EXTRA_EXERCISE_ID = "exerciseid";
     private static final int ADD_EXERCISE_REQUEST = 1;
@@ -63,19 +60,17 @@ public class RoutinesFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_routines,container,false);
         ButterKnife.bind(this,view);
 
-        mExercisesList = new ArrayList<>();
-
-        RoutinesListAdapter adapter = new RoutinesListAdapter(getContext(),mExercisesList);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(adapter);
-
         routinesViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(RoutinesViewModel.class);
-
         routinesViewModel.getExercisesOfRoutine(mRoutineId).observe(this, new Observer<List<Exercise>>() {
             @Override
             public void onChanged(List<Exercise> exercises) {
+                mExercisesList = new ArrayList<>();
                 mExercisesList = exercises;
-                adapter.setExerciseList(exercises);
+                RoutinesListAdapter adapter = new RoutinesListAdapter(getContext(),mExercisesList);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                mRecyclerView.setAdapter(adapter);
+
+                //todo change the toast to a spinner
                 Toast.makeText(view.getContext(), "List updated.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -115,7 +110,6 @@ public class RoutinesFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK && requestCode == ADD_EXERCISE_REQUEST) {
             int exerciseId = data.getExtras().getInt(EXTRA_EXERCISE_ID);
             routinesViewModel.addExerciseToRoutine(exerciseId, mRoutineId);
-
             }
         }
 
@@ -125,9 +119,4 @@ public class RoutinesFragment extends Fragment {
 }
 
 
-
-
-
 //TODO first tab of the viewpager show all exercises... routines created will be in the second tab ahead
-//TODO add button to add exercise to routine
-//TODO implement onclick listener on the recycler view, the exercise will be returned to the calendaractivity adding it to the current workout.

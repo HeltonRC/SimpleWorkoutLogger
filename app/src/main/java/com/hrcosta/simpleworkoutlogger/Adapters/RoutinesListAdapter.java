@@ -1,4 +1,4 @@
-package com.hrcosta.simpleworkoutlogger;
+package com.hrcosta.simpleworkoutlogger.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,8 +7,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hrcosta.simpleworkoutlogger.R;
+import com.hrcosta.simpleworkoutlogger.RoutinesActivity;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
-import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 
 import java.util.List;
 
@@ -42,7 +43,6 @@ public class RoutinesListAdapter extends RecyclerView.Adapter<RoutinesListAdapte
             }
         });
 
-
         return routinesViewHolder;
     }
 
@@ -50,7 +50,6 @@ public class RoutinesListAdapter extends RecyclerView.Adapter<RoutinesListAdapte
     public void onBindViewHolder(@NonNull RoutinesViewHolder holder, int position) {
         holder.tvExerciseName.setText(exerciseList.get(position).getExName());
         //todo add description field to the list of exercises
-
     }
 
     @Override

@@ -13,16 +13,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
@@ -31,6 +37,8 @@ import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.hrcosta.simpleworkoutlogger.Adapters.CalendarListAdapter;
+import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
 import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
 import com.hrcosta.simpleworkoutlogger.ViewModel.CalendarActivityViewModel;
@@ -54,10 +62,10 @@ public class CalendarActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
 
     @BindView(R.id.tv_user) TextView tvUser;
-    @BindView(R.id.tv_arrow) TextView tvArrow;
+    @BindView(R.id.btn_arrow) ImageButton btnArrow;
     @BindView(R.id.tv_date) TextView tvDate;
     @BindView(R.id.tv_list_title) TextView tvListTitle;
-    @BindView(R.id.tv_details) TextView tvDetails;
+    @BindView(R.id.tv_workoutnotes) TextView tvWorkoutNotes;
 
     @BindView(R.id.fab_add_exercise) FloatingActionButton fabAddExercise;
     @BindView(R.id.compactcalendar_view) CompactCalendarView compactCalendarView;
@@ -65,12 +73,10 @@ public class CalendarActivity extends AppCompatActivity {
 
     private ActionBar toolbar;
     private Date mDateSelected;
-    private int mCurrentWorkoutId;
+    private int mCurrentWorkoutId = -1;
     private CalendarActivityViewModel calendarActivityViewModel;
     private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
-
-    //todo change the Workout Notes to an edittext allowing to update it
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +90,7 @@ public class CalendarActivity extends AppCompatActivity {
         tvUser.setText(firebaseUser.getEmail());
 
         final View.OnClickListener exposeCalendarListener = getCalendarExposeLis();
-        tvArrow.setOnClickListener(exposeCalendarListener);
+        btnArrow.setOnClickListener(exposeCalendarListener);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -128,80 +134,17 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                addEventIndicators();
-            }
-        });
 
+        //TODO set onclick listener on workoutnotes to open a dialog to be able to edit the notes.
     }
 
-
-    private void addEventIndicators() {
-        List<Date> dates = calendarActivityViewModel.getDatesOfEvents();
-        List<Event> events = new ArrayList<>();
-
-        for (Date d : dates) {
-            Event event = new Event(Color.BLUE, d.getTime());
-            events.add(event);
-        }
-
-        compactCalendarView.addEvents(events);
-//     snippet on how to add events to the calendar
-//        formatter.setLenient(false);
-//        Date curDate = new Date();
-//        long curMillis = curDate.getTime();
-//        String curTime = formatter.format(curDate);
-//
-//        String oldTime = "05.05.2019, 12:45";
-//        Date oldDate = null;
-//        try {
-//            oldDate = formatter.parse(oldTime);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        long oldMillis = oldDate.getTime();
-//
-//        Event ev1 = new Event(Color.GREEN, oldMillis, "Some extra data that I want to store.");
-//
-//        compactCalendarView.addEvent(ev1);
-    }
-
-    private void setupObservers(CalendarListAdapter calendarListAdapter) {
-        //Get the workouts to populate the Notes for the day
-        calendarActivityViewModel.getWorkoutByDate().observe(this, new Observer<Workout>() {
-            @Override
-            public void onChanged(Workout workout) {
-                if (workout!=null) {
-                    tvListTitle.setText(getResources().getString(R.string.exercises_completed));
-                    tvDetails.setText(workout.getNotes());
-                    mCurrentWorkoutId = workout.getId();
-                } else {
-                    tvDetails.setText(R.string.no_logs);
-                }
-            }
-        });
-
-        //Get the list of exercises with the reps
-        calendarActivityViewModel.getExercisesDoneOnDate().observe(this, new Observer<List<WorkExerciseJoin>>() {
-            @Override
-            public void onChanged(List<WorkExerciseJoin> workExerciseJoins) {
-                calendarListAdapter.setWorkoutList(workExerciseJoins);
-            }
-        });
-    }
-
-
+    //onActivityResult is being used to receive the value of the routines activity.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == Activity.RESULT_OK && requestCode == ADD_EXERCISE_REQUEST) {
             int exerciseId = data.getExtras().getInt(EXTRA_EXERCISE_ID);
-
-            //TODO CHECK IF WORKOUTID IS NULL OR 0, HAVE TO CREATE A NEW ONE.
-            calendarActivityViewModel.addExerciseToWorkout(exerciseId,mCurrentWorkoutId,mDateSelected);
+            calendarActivityViewModel.addExerciseToWorkout(exerciseId,mDateSelected);
         }
 
     }
@@ -231,14 +174,10 @@ public class CalendarActivity extends AppCompatActivity {
                 if (!compactCalendarView.isAnimating()) {
                     if (shouldShow) {
                         compactCalendarView.showCalendarWithAnimation();
-                        Drawable img = CalendarActivity.this.getResources().getDrawable( R.drawable.ic_keyboard_arrow_up_black_24dp );
-                        tvArrow.setCompoundDrawablesWithIntrinsicBounds(img,null,null,null);
-
+                        btnArrow.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
                     } else {
                         compactCalendarView.hideCalendarWithAnimation();
-                        Drawable img = CalendarActivity.this.getResources().getDrawable( R.drawable.ic_keyboard_arrow_down_black_24dp );
-                        tvArrow.setCompoundDrawablesWithIntrinsicBounds(img,null,null,null);
-
+                        btnArrow.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
                     }
                     shouldShow = !shouldShow;
                 }
@@ -261,4 +200,103 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
 
+    public void selectExerciseToEdit(WorkExerciseJoin workExerciseJoin) {
+        new showDialogAsyncTask(this,workExerciseJoin).execute();
+    }
+
+
+    private void setupObservers(CalendarListAdapter calendarListAdapter) {
+        //Get the workouts to populate the Notes for the day
+        calendarActivityViewModel.getWorkoutByDate().observe(this, new Observer<Workout>() {
+            @Override
+            public void onChanged(Workout workout) {
+                if (workout!=null) {
+                    tvListTitle.setText(getResources().getString(R.string.exercises_completed));
+                    tvWorkoutNotes.setText(workout.getNotes());
+                    mCurrentWorkoutId = workout.getId();
+                } else {
+                    tvWorkoutNotes.setText(R.string.no_logs);
+                }
+            }
+        });
+
+        //Get the list of exercises with the reps
+        calendarActivityViewModel.getExercisesDoneOnDate().observe(this, new Observer<List<WorkExerciseJoin>>() {
+            @Override
+            public void onChanged(List<WorkExerciseJoin> workExerciseJoins) {
+                calendarListAdapter.setWorkoutList(workExerciseJoins);
+            }
+        });
+
+        //add events to the calendar
+        calendarActivityViewModel.getDatesOfEvents().observe(this, new Observer<List<Date>>() {
+            @Override
+            public void onChanged(List<Date> dates) {
+                List<Event> events = new ArrayList<>();
+                events.clear();
+                for (Date d : dates) {
+                    Event event = new Event(Color.BLUE, d.getTime());
+                    events.add(event);
+                }
+                compactCalendarView.removeAllEvents();
+                compactCalendarView.addEvents(events);
+            }
+        });
+    }
+
+
+    private class showDialogAsyncTask extends AsyncTask<Void, Void, Exercise> {
+        Context mContext;
+        Dialog myDialog;
+        WorkExerciseJoin workExerciseJoin;
+
+        public showDialogAsyncTask(Context context, WorkExerciseJoin workExerciseJoin) {
+            this.mContext = context;
+            this.workExerciseJoin = workExerciseJoin;
+        }
+
+        @Override
+        protected Exercise doInBackground(Void... voids) {
+            Exercise exercise = calendarActivityViewModel.getExerciseDetailFromJoin(workExerciseJoin);
+            return exercise;
+        }
+
+        @Override
+        protected void onPostExecute(Exercise exercise) {
+
+            myDialog = new Dialog(mContext);
+            myDialog.setContentView(R.layout.dialog_exercise);
+            myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            TextView tvName = myDialog.findViewById(R.id.tv_exname);
+            TextView tvDescription = myDialog.findViewById(R.id.tv_description);
+            EditText etReps = myDialog.findViewById(R.id.et_reps);
+            Button btnRemoveEx = myDialog.findViewById(R.id.btn_dialogremove);
+            Button btnConfirm = myDialog.findViewById(R.id.btn_dialogconfirm);
+
+            tvName.setText(exercise.getExName());
+            tvDescription.setText(exercise.getExDescription());
+            etReps.setText(String.valueOf(workExerciseJoin.getRepetitions()));
+            etReps.requestFocus();
+            btnRemoveEx.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    calendarActivityViewModel.removeExerciseFromWorkout(workExerciseJoin);
+                    Toast.makeText(mContext, "Exercise removed.", Toast.LENGTH_SHORT).show();
+                    myDialog.dismiss();
+                }
+            });
+
+            btnConfirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int reps = Integer.parseInt(etReps.getText().toString());
+                    calendarActivityViewModel.updateRepsInWorkoutExercise(workExerciseJoin, reps);
+                    Toast.makeText(mContext, "Exercise updated.", Toast.LENGTH_SHORT).show();
+                    myDialog.dismiss();
+                }
+            });
+
+            myDialog.show();
+        }
+    }
 }

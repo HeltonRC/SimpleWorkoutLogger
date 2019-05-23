@@ -2,6 +2,7 @@ package com.hrcosta.simpleworkoutlogger.ViewModel;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
 import com.hrcosta.simpleworkoutlogger.data.Repository.ExercisesRepository;
@@ -18,6 +19,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
+
+import static android.content.ContentValues.TAG;
 
 
 public class CalendarActivityViewModel extends AndroidViewModel {
@@ -57,6 +60,10 @@ public class CalendarActivityViewModel extends AndroidViewModel {
         workoutRepository.deleteAllWorkouts();
     }
 
+    public void removeExerciseFromWorkout(WorkExerciseJoin workExerciseJoin) {
+        workoutRepository.removeExerciseFromWorktout(workExerciseJoin);
+    }
+
     public LiveData<List<WorkExerciseJoin>> getExercisesDoneOnDate(){
         return exerciseJoinLiveData;
     }
@@ -73,44 +80,20 @@ public class CalendarActivityViewModel extends AndroidViewModel {
         return workoutRepository.getAllWEJoin();
     }
 
-    public List<Date> getDatesOfEvents() {
+    public LiveData<List<Date>> getDatesOfEvents() {
         return workoutRepository.getDatesOfEvents();
     }
 
+    public void addExerciseToWorkout(int exerciseId, Date date) {
+        workoutRepository.addExerciseToWorkout(exerciseId,date);
+    }
 
-    public void addExerciseToWorkout(int exerciseId, int workoutId, Date date) {
-        //Async task required to get the exercise details before creating the join object.
-        new AddExerciseToWorkoutAsyncTask(exercisesRepository,workoutRepository,workoutId,exerciseId,date).execute();
+    public Exercise getExerciseDetailFromJoin(WorkExerciseJoin workExerciseJoin) {
+        return exercisesRepository.getExerciseWithId(workExerciseJoin.getExerciseId());
     }
 
 
-    private static class AddExerciseToWorkoutAsyncTask extends AsyncTask<Void, Void, Exercise> {
-        private ExercisesRepository exercisesRepository;
-        private WorkoutRepository workoutRepository;
-        private int workoutId;
-        private int exerciseId;
-        private Date date;
-
-        AddExerciseToWorkoutAsyncTask(ExercisesRepository exRepository, WorkoutRepository workRepository,
-                                      int workoutId, int exerciseId, Date date) {
-            this.exercisesRepository = exRepository;
-            this.workoutRepository = workRepository;
-            this.workoutId = workoutId;
-            this.exerciseId = exerciseId;
-            this.date = date;
-        }
-
-        @Override
-        protected Exercise doInBackground(Void... voids) {
-            return exercisesRepository.getExerciseWithId(exerciseId);
-        }
-
-        @Override
-        protected void onPostExecute(Exercise exercise) {
-            super.onPostExecute(exercise);
-            WorkExerciseJoin workExerciseJoin = new WorkExerciseJoin(workoutId,exercise.getId(),date,exercise.getExName(),0);
-            workoutRepository.insertWorkExerciseJoin(workExerciseJoin);
-        }
+    public void updateRepsInWorkoutExercise(WorkExerciseJoin workExerciseJoin, int reps) {
+        workoutRepository.updateRepsInWorkoutExercise(workExerciseJoin,reps);
     }
-
 }

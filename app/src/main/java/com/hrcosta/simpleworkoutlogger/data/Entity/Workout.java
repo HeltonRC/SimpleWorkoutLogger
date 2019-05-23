@@ -13,9 +13,6 @@ public class Workout {
     private int id;
     private String notes;
 
-    @Ignore
-    private List<WorkExerciseJoin> exercisesDone;
-
     //    @ForeignKey(entity = User.class, parentColumns = "id", childColumns = "user_id")
     //    @ColumnInfo (name = "user_id")
     //    private int userId;
@@ -41,11 +38,4 @@ public class Workout {
         this.notes = notes;
     }
 
-    public List<WorkExerciseJoin> getExercisesDone() {
-        return exercisesDone;
-    }
-
-    public void setExercisesDone(List<WorkExerciseJoin> exercisesDone) {
-        this.exercisesDone = exercisesDone;
-    }
 }

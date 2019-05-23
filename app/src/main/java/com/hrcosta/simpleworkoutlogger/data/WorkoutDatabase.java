@@ -120,14 +120,10 @@ public abstract class WorkoutDatabase extends RoomDatabase {
             workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId4,date2,"exName4",10));
 
             workoutId = (int) workoutDao.insert(new Workout("notes from workout 3"));
-            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId3,date2,"exName3",10));
-            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId4,date2,"exName4",11));
-            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId2,date2,"exName2",12));
+            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId3,date3,"exName3",10));
+            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId4,date3,"exName4",11));
+            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId2,date3,"exName2",12));
 
-
-            workoutId = (int) workoutDao.insert(new Workout("notes from workout 4"));
-            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId1,date3,"exName1",10));
-            workExerciseJoinDao.insert(new WorkExerciseJoin(workoutId,exerciseId3,date3,"exName3",13));
 
             return null;
         }

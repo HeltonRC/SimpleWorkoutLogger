@@ -43,10 +43,10 @@ public interface WorkoutDao {
             "ORDER BY id")
     LiveData<List<Workout>> loadAllWorkouts();
 
-    @Query("SELECT *" +
+    @Query("SELECT id " +
             "FROM workout_table " +
             "WHERE id=:id")
-    LiveData<Workout> loadWorkoutById(int id);
+    Integer loadWorkoutIdById(int id);
 
 
     @Query("SELECT * " +
