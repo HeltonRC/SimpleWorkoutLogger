@@ -84,8 +84,6 @@ public class CalendarActivity extends AppCompatActivity {
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    //TODO home screen widget
-    //TODO firebase analytics or admob
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

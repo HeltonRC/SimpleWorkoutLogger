@@ -27,8 +27,6 @@ public class MainActivity extends AppCompatActivity {
     private String emailInput;
     private String passwordInput;
 
-
-   // @BindView(R.id.appbar_login) Toolbar mToolbar;
     @BindView(R.id.textinput_email) TextInputLayout textInputEmail;
     @BindView(R.id.textinput_password) TextInputLayout textInputPassword;
     @BindView(R.id.btn_confirm) Button btnConfirm;
@@ -38,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("-----------------ONDESTROY MAIN ACTIVITY", "onDestroy: called");
     }
 
     @Override
@@ -47,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setTitle("User Login");
+        getSupportActionBar().setTitle(getString(R.string.user_login));
 
         FirebaseApp.initializeApp(this);
 
@@ -60,10 +57,8 @@ public class MainActivity extends AppCompatActivity {
                     //user loggedin , goes to calendar.
                     startActivity(new Intent(MainActivity.this, CalendarActivity.class));
                 }
-
             }
         };
-
 
     }
 
@@ -88,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
-                        Toast.makeText(MainActivity.this, "successfull", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, R.string.successfull, Toast.LENGTH_LONG).show();
                         startActivity(new Intent(MainActivity.this, CalendarActivity.class));
                     }else{
                         Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -111,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         emailInput = textInputEmail.getEditText().getText().toString().trim();
 
         if (emailInput.isEmpty()){
-            textInputEmail.setError("Field can't be empty");
+            textInputEmail.setError(getString(R.string.cant_be_empty));
             return false;
         } else {
             textInputEmail.setError(null);
@@ -125,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         passwordInput = textInputPassword.getEditText().getText().toString().trim();
 
         if (passwordInput.isEmpty()){
-            textInputPassword.setError("Field can't be empty");
+            textInputPassword.setError(getString(R.string.cant_be_empty));
             return false;
         } else {
             textInputPassword.setError(null);

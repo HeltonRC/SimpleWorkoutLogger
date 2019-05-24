@@ -16,6 +16,7 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/add_exercise_tolist"
         android:layout_marginTop="16dp"
         android:background="@color/colorPrimary"
         android:src="@android:drawable/ic_input_add"

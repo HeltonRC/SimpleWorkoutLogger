@@ -28,6 +28,7 @@
             android:id="@+id/btn_addtab"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:contentDescription="@string/add_tab"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
             android:src="@android:drawable/ic_input_add"

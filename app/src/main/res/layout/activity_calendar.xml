@@ -58,6 +58,7 @@
         android:layout_below="@id/guideline"
         android:layout_alignParentStart="true"
         android:background="@android:color/transparent"
+        android:contentDescription="@string/open_close_calendar"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
@@ -151,6 +152,7 @@
         android:layout_margin="16dp"
         android:tint="@android:color/white"
         android:clickable="true"
+        android:contentDescription="@string/fab_log_exercise"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         app:srcCompat="@android:drawable/ic_input_add" />

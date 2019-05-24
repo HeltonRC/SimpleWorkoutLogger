@@ -81,9 +81,10 @@ public interface WorkExerciseJoinDao {
     @Query("UPDATE work_exercises_join SET repetitions=:reps WHERE id = :id")
     void updateWEJoin(int id, int reps);
 
-    @Query("")
-    List<String> getLastWorkoutForWidget();
+    @Query("SELECT * FROM work_exercises_join WHERE log_date<date('now') ORDER BY log_date DESC LIMIT 1")
+    WorkExerciseJoin getLastWorkoutDone();
 
-    @Query("SELECT log_date FROM work_exercises_join WHERE ????")
-    Date getLastDateOfWorkout(Date date);
+
+    @Query("SELECT ex_name FROM work_exercises_join WHERE workoutId=:workoutId")
+    List<String> getListOfExercisesForWorkout(int workoutId);
 }

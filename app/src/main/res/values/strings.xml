@@ -21,4 +21,20 @@
     <string name="no">No</string>
     <string name="appwidget_text">Last Workout: </string>
     <string name="add_widget">Add widget</string>
+    <string name="loginbtn">login</string>
+    <string name="registerbtn">register</string>
+    <string name="fab_log_exercise">log exercise button</string>
+    <string name="open_close_calendar">open or close calendar button</string>
+    <string name="register">Register</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="add_tab">Add a new tab</string>
+    <string name="update">Update</string>
+    <string name="remove_item">Remove item</string>
+    <string name="update_reps">Update reps</string>
+    <string name="reps">Reps:</string>
+    <string name="user_login">User Login</string>
+    <string name="successfull">Successfull</string>
+    <string name="cant_be_empty">Field can\'t be empty</string>
 </resources>

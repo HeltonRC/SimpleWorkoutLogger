@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="350dp"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center">
 
     <LinearLayout
@@ -17,7 +17,7 @@
             android:id="@+id/tv_exname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Exercise Name"
+            tools:text="Exercise Name"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:textSize="24sp"
@@ -29,7 +29,7 @@
             android:id="@+id/tv_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Exercise details are going to be filled here in this box."
+            tools:text="Exercise details are going to be filled here in this box."
             android:textSize="18sp"
             android:textColor="@android:color/white"
             android:layout_marginTop="5dp"
@@ -54,7 +54,7 @@
                 android:textSize="24sp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:text="Reps:"/>
+                android:text="@string/reps"/>
 
             <EditText
                 android:id="@+id/et_reps"
@@ -74,7 +74,8 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:textAlignment="textStart"
-            android:text="Update reps"
+            android:text="@string/update_reps"
+            android:contentDescription="@string/update_reps"
             android:layout_marginTop="8dp"
             android:drawablePadding="20dp"
             android:drawableLeft="@drawable/ic_dumbbell"/>
@@ -85,7 +86,8 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:textAlignment="textStart"
-            android:text="Remove item"
+            android:text="@string/remove_item"
+            android:contentDescription="@string/remove_item"
             android:drawablePadding="20dp"
             android:drawableLeft="@drawable/ic_mood_bad_black_24dp"/>
 
