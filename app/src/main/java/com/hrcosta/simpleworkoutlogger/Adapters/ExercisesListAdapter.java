@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ExercisesListAdapter extends RecyclerView.Adapter<ExercisesListAdapter.ViewHolderExercisesList> {
-    Context mContext;
+    private Context mContext;
     private List<Exercise> exercisesList = new ArrayList<>();
     private LinearLayout llListExercises;
 
@@ -71,7 +71,7 @@ public class ExercisesListAdapter extends RecyclerView.Adapter<ExercisesListAdap
         private TextView tvExerciseName;
         private LinearLayout llListExercises;
 
-        public ViewHolderExercisesList(@NonNull View itemView) {
+        ViewHolderExercisesList(@NonNull View itemView) {
             super(itemView);
             tvExerciseName = itemView.findViewById(R.id.tv_exercisename);
             llListExercises = itemView.findViewById(R.id.ll_list_item_exe);

@@ -66,7 +66,7 @@ public class ExercisesActivity  extends AppCompatActivity {
         finish();
     }
 
-    //required this method as the default back button
+    // required this method as the default back button
     // functionality runs oncreate of the previous activity.
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId()== android.R.id.home) {

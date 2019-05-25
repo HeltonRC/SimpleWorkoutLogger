@@ -35,6 +35,11 @@
     <string name="update_reps">Update reps</string>
     <string name="reps">Reps:</string>
     <string name="user_login">User Login</string>
-    <string name="successfull">Successfull</string>
+    <string name="successful">Successful</string>
     <string name="cant_be_empty">Field can\'t be empty</string>
+    <string name="user_email_placeholder">username@email.com</string>
+    <string name="login">Login</string>
+    <string name="edit_workout_notes">edit workout notes</string>
+    <string name="dumbbell_image">dumbbell image</string>
+    <string name="dumbbell_icon">dumbbell icon</string>
 </resources>

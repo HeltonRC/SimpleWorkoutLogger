@@ -14,9 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -88,7 +86,8 @@ public class RegisterActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(RegisterActivity.this, user + "Registered successfully.. redirecting", Toast.LENGTH_LONG).show();
 
-                            //Analytics event:
+
+                            //Firebase Analytics event:
                             Bundle bundle = new Bundle();
                             bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, emailInput);
                             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Email");

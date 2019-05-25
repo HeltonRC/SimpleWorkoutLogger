@@ -47,7 +47,7 @@ public class RoutinesActivity extends AppCompatActivity {
     private List<Routine> mRoutines;
     private Date mSelectedDate;
     private ActionBar toolbar;
-    private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+    private final SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

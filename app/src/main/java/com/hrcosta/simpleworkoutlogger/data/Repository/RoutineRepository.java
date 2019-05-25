@@ -3,7 +3,6 @@ package com.hrcosta.simpleworkoutlogger.data.Repository;
 import android.app.Application;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.hrcosta.simpleworkoutlogger.data.DAO.RoutineDao;
 import com.hrcosta.simpleworkoutlogger.data.DAO.RoutineExerciseJoinDao;

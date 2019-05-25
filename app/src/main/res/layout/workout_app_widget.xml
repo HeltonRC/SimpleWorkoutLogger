@@ -35,7 +35,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/white"
         android:padding="5dp"
-        android:text="detais list"
+        tools:text="detais list"
         android:textSize="12sp"
         android:textStyle="bold|italic" />
 

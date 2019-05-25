@@ -57,12 +57,12 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
         notifyDataSetChanged();
     }
 
-    public class ViewHolderCalendarList extends RecyclerView.ViewHolder{
+    class ViewHolderCalendarList extends RecyclerView.ViewHolder{
         private CardView cvContainer;
         private TextView tvName;
         private TextView tvDetails;
 
-        public ViewHolderCalendarList(@NonNull View itemView) {
+        ViewHolderCalendarList(@NonNull View itemView) {
             super(itemView);
             cvContainer = itemView.findViewById(R.id.cv_container);
             tvName = itemView.findViewById(R.id.tv_name);

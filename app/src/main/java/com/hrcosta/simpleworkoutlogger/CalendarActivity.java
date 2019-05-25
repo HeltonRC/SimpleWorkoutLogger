@@ -21,11 +21,9 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -63,8 +61,8 @@ public class CalendarActivity extends AppCompatActivity {
     private Calendar currentCalender = Calendar.getInstance(Locale.getDefault());
     private boolean shouldShow = false;
     private String mUser;
-    FirebaseAuth firebaseAuth;
-    FirebaseUser firebaseUser;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
 
     @BindView(R.id.tv_user) TextView tvUser;
     @BindView(R.id.btn_arrow) ImageButton btnArrow;
@@ -80,8 +78,8 @@ public class CalendarActivity extends AppCompatActivity {
     private Date mDateSelected;
     private Workout mCurrentWorkout = null;
     private CalendarActivityViewModel calendarActivityViewModel;
-    private SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
-    private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
+    private final SimpleDateFormat dateFormatForDisplaying = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+    private final SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
@@ -306,7 +304,7 @@ public class CalendarActivity extends AppCompatActivity {
         Dialog myDialog;
         WorkExerciseJoin workExerciseJoin;
 
-        public showExerciseDialogAsyncTask(Context context, WorkExerciseJoin workExerciseJoin) {
+        showExerciseDialogAsyncTask(Context context, WorkExerciseJoin workExerciseJoin) {
             this.mContext = context;
             this.workExerciseJoin = workExerciseJoin;
         }
@@ -350,9 +348,14 @@ public class CalendarActivity extends AppCompatActivity {
             btnConfirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int reps = Integer.parseInt(etReps.getText().toString());
-                    calendarActivityViewModel.updateRepsInWorkoutExercise(workExerciseJoin, reps);
-                    Toast.makeText(mContext, "Exercise updated.", Toast.LENGTH_SHORT).show();
+                    try {
+                        int reps = Integer.parseInt(etReps.getText().toString());
+                        calendarActivityViewModel.updateRepsInWorkoutExercise(workExerciseJoin, reps);
+                        Toast.makeText(mContext, "Exercise updated.", Toast.LENGTH_SHORT).show();
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(getApplicationContext(), "Invalid number", Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     myDialog.dismiss();
                 }
             });

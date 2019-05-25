@@ -13,10 +13,8 @@ import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.WorkoutDatabase;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 /**
  * Implementation of App Widget functionality.
@@ -39,11 +37,8 @@ public class WorkoutAppWidget extends AppWidgetProvider {
         if (workExerciseJoin!=null) {
             views.setTextViewText(R.id.appwidget_date, dateFormatForDisplaying.format(workExerciseJoin.getLogDate()));
             views.setTextViewText(R.id.appwidget_details, exercisesStr);
-
             views.setOnClickPendingIntent(R.id.appwidget_layout, pendingIntent);
-
         }
-
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -64,7 +59,7 @@ public class WorkoutAppWidget extends AppWidgetProvider {
         // Enter relevant functionality for when the last widget is disabled
     }
 
-    private class GetDetailsForWidgetAsyncTask extends AsyncTask<Void,Void,String> {
+    private static class GetDetailsForWidgetAsyncTask extends AsyncTask<Void,Void,String> {
         AppWidgetManager appWidgetManager;
         int[] appWidgetIds;
         WorkExerciseJoin workExerciseJoin;
@@ -79,11 +74,12 @@ public class WorkoutAppWidget extends AppWidgetProvider {
         @Override
         protected String doInBackground(Void... voids) {
 
-            List<String> exercisesList = null;
+            List<String> exercisesList;
             String formattedList = "";
 
             WorkoutDatabase db = WorkoutDatabase.getInstance(context);
             WorkExerciseJoinDao workExerciseJoinDao = db.workExerciseJoinDao();
+
             workExerciseJoin = workExerciseJoinDao.getLastWorkoutDone();
             exercisesList = workExerciseJoinDao.getListOfExercisesForWorkout(workExerciseJoin.getWorkoutId());
 

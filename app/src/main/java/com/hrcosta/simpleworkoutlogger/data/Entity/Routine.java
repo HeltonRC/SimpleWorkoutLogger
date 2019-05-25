@@ -3,8 +3,6 @@ package com.hrcosta.simpleworkoutlogger.data.Entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
-
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;

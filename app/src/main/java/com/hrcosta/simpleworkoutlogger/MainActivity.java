@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 import butterknife.BindView;
@@ -32,11 +31,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.btn_confirm) Button btnConfirm;
     @BindView(R.id.btn_register) Button btnRegister;
 
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
-                        Toast.makeText(MainActivity.this, R.string.successfull, Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, R.string.successful, Toast.LENGTH_LONG).show();
                         startActivity(new Intent(MainActivity.this, CalendarActivity.class));
                     }else{
                         Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();

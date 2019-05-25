@@ -1,6 +1,5 @@
 package com.hrcosta.simpleworkoutlogger.data.DAO;
 
-import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
 import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
 
@@ -22,21 +21,13 @@ public interface WorkExerciseJoinDao {
     @Delete
     void delete(WorkExerciseJoin workExerciseJoin);
 
-//    @Query("SELECT * " +
-//            "FROM exercise_table t1 INNER JOIN work_exercises_join t2 ON" +
-//            " t1.id = t2.exerciseId WHERE " +
-//            " t2.workoutId=:workoutId " +
-//            "ORDER BY t2.id")
-//    LiveData<List<Exercise>> getExercisesForWorkout (final int workoutId);
-//
-//
-//    @Query("SELECT * FROM exercise_table t1 " +
-//            "INNER JOIN work_exercises_join t2 " +
-//            "ON t1.Id = t2.exerciseId WHERE " +
-//            " t2.workoutId=:workoutId " +
-//            "ORDER BY t2.id")
-//    List<WorkExerciseJoin> getExercisesListForWorkout(final int workoutId);
-
+    //
+    // Android Studio is complaining for the fields non existent on the entity, but this will
+    // not cause errors running the app, the day, month and year parameters are used only to
+    // filter the result of the query, those data does not need to be stored on the entity.
+    // For some reason Android Studio does not recognize the CAST columns as parameters for
+    // the WHERE clause, and SQLITE runs it with no issues.
+    //
 
     @Query("SELECT *, " +
             "CAST(strftime('%Y', datetime(log_date/1000, 'unixepoch')) AS int) AS year, " +
@@ -81,7 +72,8 @@ public interface WorkExerciseJoinDao {
     @Query("UPDATE work_exercises_join SET repetitions=:reps WHERE id = :id")
     void updateWEJoin(int id, int reps);
 
-    @Query("SELECT * FROM work_exercises_join WHERE log_date<date('now') ORDER BY log_date DESC LIMIT 1")
+    // log_date<date(now) is not
+    @Query("SELECT * FROM work_exercises_join WHERE datetime(log_date/1000, 'unixepoch')<date('now') ORDER BY log_date DESC LIMIT 1")
     WorkExerciseJoin getLastWorkoutDone();
 
 

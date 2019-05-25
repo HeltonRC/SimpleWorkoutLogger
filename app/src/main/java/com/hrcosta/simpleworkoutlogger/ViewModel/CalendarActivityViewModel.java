@@ -1,12 +1,9 @@
 package com.hrcosta.simpleworkoutlogger.ViewModel;
 
 import android.app.Application;
-import android.os.AsyncTask;
-import android.util.Log;
 
 import com.hrcosta.simpleworkoutlogger.data.Entity.Exercise;
 import com.hrcosta.simpleworkoutlogger.data.Repository.ExercisesRepository;
-import com.hrcosta.simpleworkoutlogger.data.Repository.UserRepository;
 import com.hrcosta.simpleworkoutlogger.data.Entity.WorkExerciseJoin;
 import com.hrcosta.simpleworkoutlogger.data.Entity.Workout;
 import com.hrcosta.simpleworkoutlogger.data.Repository.WorkoutRepository;
@@ -20,8 +17,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-import static android.content.ContentValues.TAG;
-
 
 public class CalendarActivityViewModel extends AndroidViewModel {
 
@@ -29,7 +24,7 @@ public class CalendarActivityViewModel extends AndroidViewModel {
     private ExercisesRepository exercisesRepository;
     private LiveData<List<WorkExerciseJoin>> exerciseJoinLiveData;
     private LiveData<Workout> workoutLiveData;
-    private MutableLiveData<Date> calendarDate = new MutableLiveData<Date>();
+    private MutableLiveData<Date> calendarDate = new MutableLiveData<>();
 
     public CalendarActivityViewModel(@NonNull Application application) {
         super(application);
