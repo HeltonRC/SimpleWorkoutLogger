@@ -1,14 +1,12 @@
 # Udacity Capstone Project
 
-## SimpleWorkoutLogger
 
-### Project Overview
-In Stage 1, you designed and planned your Capstone app. Now, it's time to build it!
+This is a project done with the main purpose to practice and demonstrate the skills earned across the Android Nanodegree of Udacity,
+it is the second and final stage of the Capstone Project, in which the plan and design made in the first stage will be implemented
+following the specifications and requirements for the project.
 
-Nanodegree students must successfully complete the Capstone, Stage 1 project prior to beginning Stage 2.
+##Simple Workout Logger
+###Description
 
-### Why this Project?
-In this project, you will demonstrate the skills you've learned in your Nanodegree journey, and apply them to creating a unique app experience of your own. By the end of this project, you will have an app that you can submit to the Google Play Store for distribution.
-
-### What Will I Learn?
-The Capstone project will give you the experience you need to own the full development cycle of an app.
+This is an app for people who are looking for an alternative of the workout cards you get on the gym to log your workouts and progress in the paper.
+Something simple as keeping a workout log can help you stay focused and keep you motivated as you chase down your fitness goals.
