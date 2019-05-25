@@ -32,10 +32,10 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressDialog mProgressDialog;
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    @BindView(R.id.textinput_email) TextInputLayout textInputEmail;
+    @BindView(R.id.textinput_reg_email) TextInputLayout textInputEmail;
     @BindView(R.id.textinput_username) TextInputLayout textInputName;
-    @BindView(R.id.textinput_password) TextInputLayout textInputPass;
-    @BindView(R.id.textinput_password2) TextInputLayout textInputPass2;
+    @BindView(R.id.textinput_reg_password) TextInputLayout textInputPass;
+    @BindView(R.id.textinput_reg_password2) TextInputLayout textInputPass2;
     @BindView(R.id.btn_register) Button btnRegister;
 
 
@@ -68,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
         if ( !validateEmail() | !validatePassword() | !validateUserName()) {
             return;
         } else {
-            Toast.makeText(this, "Validation ok.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.validation_ok, Toast.LENGTH_LONG).show();
             mProgressDialog.setMessage("Creating account...");
             mProgressDialog.show();
             RegisterAccount(emailInput,passwordInput);
@@ -84,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             mProgressDialog.dismiss();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(RegisterActivity.this, user + "Registered successfully.. redirecting", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RegisterActivity.this, user + getString(R.string.successfully_redirect), Toast.LENGTH_LONG).show();
 
 
                             //Firebase Analytics event:
@@ -96,8 +96,8 @@ public class RegisterActivity extends AppCompatActivity {
                         } else {
                             mProgressDialog.dismiss();
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(RegisterActivity.this, "Error: "+ task.getException().toString(), Toast.LENGTH_LONG).show();
+                            Log.w(TAG, getString(R.string.register_email_failed), task.getException());
+                            Toast.makeText(RegisterActivity.this, getString(R.string.error)+ task.getException().toString(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -109,7 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
         emailInput = textInputEmail.getEditText().getText().toString().trim();
 
         if (emailInput.isEmpty()){
-            textInputEmail.setError("Field can't be empty");
+            textInputEmail.setError(getString(R.string.cant_be_empty));
             return false;
         } else {
             textInputEmail.setError(null);
@@ -121,10 +121,10 @@ public class RegisterActivity extends AppCompatActivity {
         usernameInput = textInputName.getEditText().getText().toString().trim();
 
         if (usernameInput.isEmpty()){
-            textInputName.setError("Field can't be empty");
+            textInputName.setError(getString(R.string.cant_be_empty));
             return false;
         } else if (usernameInput.length() > 15 ) {
-            textInputEmail.setError("Username too long");
+            textInputEmail.setError(getString(R.string.username_too_long));
             return false;
         } else {
             textInputEmail.setError(null);
@@ -138,13 +138,13 @@ public class RegisterActivity extends AppCompatActivity {
         passwordInput2 = textInputPass2.getEditText().getText().toString().trim();
 
         if (passwordInput.isEmpty()){
-            textInputPass.setError("Field can't be empty.");
+            textInputPass.setError(getString(R.string.cant_be_empty));
             return false;
         } else if (passwordInput2.isEmpty()) {
-            textInputPass2.setError("Field can't be empty.");
+            textInputPass2.setError(getString(R.string.cant_be_empty));
             return false;
         } else if (!passwordInput.equals(passwordInput2)) {
-            textInputPass2.setError("re-type the same password.");
+            textInputPass2.setError(getString(R.string.retype_password));
             return false;
         } else {
             textInputPass.setError(null);

@@ -6,7 +6,7 @@ import android.content.Intent;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-class Home extends Application {
+public class Home extends Application {
 
     @Override
     public void onCreate() {

@@ -71,7 +71,7 @@ public class RoutinesFragment extends Fragment {
                 mRecyclerView.setAdapter(adapter);
 
                 //todo change the toast to a spinner
-                Toast.makeText(view.getContext(), "List updated.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), R.string.list_updated, Toast.LENGTH_SHORT).show();
             }
         });
         return view;

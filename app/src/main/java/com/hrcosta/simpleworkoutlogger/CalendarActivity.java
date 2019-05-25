@@ -299,10 +299,11 @@ public class CalendarActivity extends AppCompatActivity {
         notesDialog.show();
     }
 
-    private class showExerciseDialogAsyncTask extends AsyncTask<Void, Void, Exercise> {
+    private static class showExerciseDialogAsyncTask extends AsyncTask<Void, Void, Exercise> {
         Context mContext;
         Dialog myDialog;
         WorkExerciseJoin workExerciseJoin;
+        private CalendarActivityViewModel calendarActivityViewModel;
 
         showExerciseDialogAsyncTask(Context context, WorkExerciseJoin workExerciseJoin) {
             this.mContext = context;
@@ -340,7 +341,7 @@ public class CalendarActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     calendarActivityViewModel.removeExerciseFromWorkout(workExerciseJoin);
-                    Toast.makeText(mContext, "Exercise removed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.exercise_removed, Toast.LENGTH_SHORT).show();
                     myDialog.dismiss();
                 }
             });
@@ -351,9 +352,9 @@ public class CalendarActivity extends AppCompatActivity {
                     try {
                         int reps = Integer.parseInt(etReps.getText().toString());
                         calendarActivityViewModel.updateRepsInWorkoutExercise(workExerciseJoin, reps);
-                        Toast.makeText(mContext, "Exercise updated.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.exercise_removed, Toast.LENGTH_SHORT).show();
                     } catch (NumberFormatException e) {
-                        Toast.makeText(getApplicationContext(), "Invalid number", Toast.LENGTH_LONG).show();
+                        Toast.makeText(v.getContext(), R.string.invalid_number, Toast.LENGTH_LONG).show();
                         return;
                     }
                     myDialog.dismiss();

@@ -42,4 +42,13 @@
     <string name="edit_workout_notes">edit workout notes</string>
     <string name="dumbbell_image">dumbbell image</string>
     <string name="dumbbell_icon">dumbbell icon</string>
+    <string name="validation_ok">Validation ok.</string>
+    <string name="successfully_redirect">Registered successfully.. redirecting</string>
+    <string name="error">Error:</string>
+    <string name="register_email_failed">createUserWithEmail:failure</string>
+    <string name="list_updated">List updated.</string>
+    <string name="exercise_removed">Exercise removed.</string>
+    <string name="invalid_number">Invalid number</string>
+    <string name="username_too_long">Username too long.</string>
+    <string name="retype_password">re-type the same password</string>
 </resources>
