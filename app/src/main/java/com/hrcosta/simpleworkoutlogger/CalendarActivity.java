@@ -17,10 +17,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -160,6 +163,18 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
+
+        /**test on settings activity*/
+        setupSharedPreferences();
+
+    }
+
+    private void setupSharedPreferences() {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+
+
     }
 
     //onActivityResult is being used to receive the value of the routines activity.
@@ -186,6 +201,8 @@ public class CalendarActivity extends AppCompatActivity {
             firebaseAuth.signOut();
             startActivity(new Intent(CalendarActivity.this,MainActivity.class)
                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        } else if (id == R.id.action_settings) {
+            startActivity(new Intent(CalendarActivity.this, SettingsActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }

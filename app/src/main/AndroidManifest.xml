@@ -16,6 +16,14 @@
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="stateAlwaysHidden"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".CalendarActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hrcosta.simpleworkoutlogger.CalendarActivity" />
+        </activity>
 
         <receiver android:name=".WorkoutAppWidget">
             <intent-filter>
@@ -27,23 +35,20 @@
                 android:resource="@xml/workout_app_widget_info" />
         </receiver>
 
-        <activity android:name=".CalendarActivity">
-        </activity>
+        <activity android:name=".CalendarActivity"></activity>
         <activity
             android:name=".RoutinesActivity"
-            android:parentActivityName=".CalendarActivity">
-        </activity>
+            android:parentActivityName=".CalendarActivity"></activity>
         <activity
             android:name=".ExercisesActivity"
-            android:parentActivityName=".RoutinesActivity">
-        </activity>
+            android:parentActivityName=".RoutinesActivity"></activity>
         <activity
             android:name=".RegisterActivity"
-            android:parentActivityName=".MainActivity">
-        </activity>
+            android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
