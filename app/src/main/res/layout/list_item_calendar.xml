@@ -13,6 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal">
 
     <ImageView
@@ -20,7 +21,8 @@
         android:layout_height="56dp"
         android:id="@+id/iv_listicon"
         android:contentDescription="@string/dumbbell_icon"
-        android:src="@drawable/ic_dumbbell"
+        android:tint="@android:color/white"
+        app:srcCompat="@drawable/ic_dumbbell"
         android:padding="10dp"/>
 
     <LinearLayout
@@ -34,6 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="TextView"
+        android:textColor="@color/whiteText"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textAlignment="textStart"/>
@@ -50,6 +53,7 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:text="@string/repetitions"
+            android:textColor="@color/whiteText"
             android:textAlignment="textEnd"/>
 
         <TextView
@@ -58,6 +62,7 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             tools:text="99"
+            android:textColor="@color/whiteText"
             android:textAlignment="textEnd"/>
 
     </LinearLayout>

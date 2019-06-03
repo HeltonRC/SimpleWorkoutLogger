@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".CalendarActivity">
     <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/compactcalendar_view"
@@ -13,25 +14,27 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        app:compactCalendarBackgroundColor="#694FB8"
-        app:compactCalendarCurrentDayBackgroundColor="#BAA3FF"
+        app:compactCalendarBackgroundColor="@color/colorPrimary"
+        app:compactCalendarCurrentDayBackgroundColor="#D4ADFF"
         app:compactCalendarCurrentDayIndicatorStyle="fill_large_indicator"
-        app:compactCalendarCurrentSelectedDayBackgroundColor="#FDFDFF"
+        app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorAccent"
         app:compactCalendarCurrentSelectedDayTextColor="#585858"
         app:compactCalendarEventIndicatorStyle="small_indicator"
         app:compactCalendarOtherMonthDaysTextColor="#FFFFFF"
         app:compactCalendarShouldSelectFirstDayOfMonthOnScroll="true"
         app:compactCalendarTargetHeight="250dp"
-        app:compactCalendarTextColor="#FFFFFF"
+        app:compactCalendarTextColor="@color/whiteText"
         app:compactCalendarTextSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
     </com.github.sundeepk.compactcalendarview.CompactCalendarView>
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent"
         android:orientation="horizontal"
         android:layout_below="@id/compactcalendar_view" />
     <TextView
@@ -41,10 +44,12 @@
         android:layout_above="@+id/sv_container"
         android:layout_below="@id/guideline"
         android:layout_alignParentEnd="true"
+        android:gravity="center"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         tools:text="@string/user_email_placeholder"
+        android:textColor="@color/whiteText"
         android:textSize="14sp" />
     <ImageButton
         android:id="@+id/btn_arrow"
@@ -58,7 +63,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
+        app:srcCompat="@drawable/ic_keyboard_arrow_up_black_24dp"
         android:textSize="24sp" />
     <ScrollView
         android:id="@+id/sv_container"
@@ -73,18 +78,43 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp">
-            <TextView
-                android:id="@+id/tv_date"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:textAlignment="textEnd"
-                android:textSize="17sp"
-                tools:text="05/05/1999"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/whiteText"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    />
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="0dp"
+                    android:layout_height="24dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/whiteText"
+                    android:textSize="17sp"
+                    android:layout_weight="1"
+                    tools:text="05 may 1999"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/whiteText"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    />
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/tv_list_title"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
                 android:textAlignment="textStart"
+                android:textColor="@color/whiteText"
                 android:layout_marginBottom="8dp"
                 android:textSize="17sp"
                 tools:text="Exercises completed: "/>
@@ -109,13 +139,14 @@
                     android:textSize="17sp"
                     android:layout_gravity="bottom"
                     android:textAlignment="center"
+                    android:textColor="@color/whiteText"
                     tools:text="@string/exercise_notes"/>
                 <ImageButton
                     android:id="@+id/btn_editnote"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_mode_edit"
+                    app:srcCompat="@drawable/ic_mode_edit"
                     android:contentDescription="@string/edit_workout_notes"
                     android:layout_marginRight="8dp"
                     android:layout_marginLeft="8dp"
@@ -129,7 +160,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:tint="@android:color/white"
+        android:tint="#585858"
         android:clickable="true"
         android:contentDescription="@string/fab_log_exercise"
         android:layout_alignParentBottom="true"
